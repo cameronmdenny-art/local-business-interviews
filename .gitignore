@@ -1,0 +1,27 @@
+# Build & packaging
+dist/
+*.zip
+build-release.sh
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# Backups
+*.backup
+*.bak
+
+# Temp files
+*~
+*.tmp
+*.log
+
+# Dependencies (if using Composer in future)
+vendor/
+composer.lock
