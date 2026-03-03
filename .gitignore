@@ -25,3 +25,6 @@ Thumbs.db
 # Dependencies (if using Composer in future)
 vendor/
 composer.lock
+
+# Environment variables (contains FTP password)
+.env

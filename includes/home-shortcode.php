@@ -14,11 +14,30 @@ function lbi_home_page_shortcode() {
 	ob_start();
 	?>
 	<style>
+		/* Apple-Inspired Premium Design */
 		:root {
 			--lbi-gold: #bfa673;
 			--lbi-dark: #1a1a1a;
 			--lbi-light: #f5f5f5;
 			--lbi-text: #333;
+			--lbi-easing: cubic-bezier(0.4, 0, 0.2, 1);
+			--lbi-bounce: cubic-bezier(0.34, 1.56, 0.64, 1);
+		}
+
+		html {
+			scroll-behavior: smooth;
+			-webkit-font-smoothing: antialiased;
+			-moz-osx-font-smoothing: grayscale;
+		}
+
+		@media (prefers-reduced-motion: reduce) {
+			html {
+				scroll-behavior: auto;
+			}
+			*, *::before, *::after {
+				animation-duration: 0.01ms !important;
+				transition-duration: 0.01ms !important;
+			}
 		}
 
 		.lbi-hero {
@@ -49,6 +68,34 @@ function lbi_home_page_shortcode() {
 			z-index: 2;
 			max-width: 800px;
 			padding: 2rem;
+			animation: fadeInUp 0.8s var(--lbi-easing) backwards;
+		}
+
+		@keyframes fadeInUp {
+			from {
+				opacity: 0;
+				transform: translateY(40px);
+			}
+			to {
+				opacity: 1;
+				transform: translateY(0);
+			}
+		}
+
+		@keyframes fadeIn {
+			from { opacity: 0; }
+			to { opacity: 1; }
+		}
+
+		@keyframes scaleIn {
+			from {
+				opacity: 0;
+				transform: scale(0.95);
+			}
+			to {
+				opacity: 1;
+				transform: scale(1);
+			}
 		}
 
 		.lbi-logo {
@@ -85,14 +132,43 @@ function lbi_home_page_shortcode() {
 			border: 2px solid var(--lbi-gold);
 			border-radius: 50px;
 			text-decoration: none;
-			transition: all 0.3s ease;
+			transition: all 0.4s var(--lbi-easing);
 			margin-top: 2rem;
 			cursor: pointer;
+			box-shadow: 0 4px 15px rgba(191, 166, 115, 0.3);
+			position: relative;
+			overflow: hidden;
+			animation: fadeIn 1s 0.6s var(--lbi-easing) backwards;
+		}
+
+		.lbi-cta-button::before {
+			content: '';
+			position: absolute;
+			top: 50%;
+			left: 50%;
+			width: 0;
+			height: 0;
+			border-radius: 50%;
+			background: rgba(255, 255, 255, 0.1);
+			transform: translate(-50%, -50%);
+			transition: width 0.6s var(--lbi-easing), height 0.6s var(--lbi-easing);
+		}
+
+		.lbi-cta-button:hover::before {
+			width: 300px;
+			height: 300px;
 		}
 
 		.lbi-cta-button:hover {
 			background-color: transparent;
 			color: var(--lbi-gold);
+			box-shadow: 0 8px 30px rgba(191, 166, 115, 0.4);
+			transform: translateY(-4px) scale(1.02);
+		}
+
+		.lbi-cta-button:active {
+			transform: translateY(-2px) scale(0.98);
+			transition: all 0.1s var(--lbi-easing);
 		}
 
 		.lbi-content-section {
@@ -111,6 +187,28 @@ function lbi_home_page_shortcode() {
 			margin-bottom: 3rem;
 			color: var(--lbi-dark);
 			font-weight: 700;
+			animation: fadeInUp 0.8s var(--lbi-easing) backwards;
+			position: relative;
+			padding-bottom: 1rem;
+		}
+
+		.lbi-section-title::after {
+			content: '';
+			position: absolute;
+			bottom: 0;
+			left: 50%;
+			transform: translateX(-50%);
+			width: 0;
+			height: 4px;
+			background: linear-gradient(90deg, transparent, var(--lbi-gold), transparent);
+			border-radius: 2px;
+			animation: expandWidth 1s 0.4s var(--lbi-easing) forwards;
+		}
+
+		@keyframes expandWidth {
+			to {
+				width: 80px;
+			}
 		}
 
 		.lbi-grid {
@@ -122,17 +220,28 @@ function lbi_home_page_shortcode() {
 
 		.lbi-card {
 			background: white;
-			border-radius: 8px;
+			border-radius: 12px;
 			overflow: hidden;
-			box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
-			transition: all 0.3s ease;
+			box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+			transition: all 0.4s var(--lbi-easing);
 			display: flex;
 			flex-direction: column;
+			animation: scaleIn 0.6s var(--lbi-bounce) backwards;
+			transform: translateZ(0);
+			backface-visibility: hidden;
 		}
 
+		/* Staggered animation delays for cards */
+		.lbi-card:nth-child(1) { animation-delay: 0.1s; }
+		.lbi-card:nth-child(2) { animation-delay: 0.2s; }
+		.lbi-card:nth-child(3) { animation-delay: 0.3s; }
+		.lbi-card:nth-child(4) { animation-delay: 0.4s; }
+		.lbi-card:nth-child(5) { animation-delay: 0.5s; }
+		.lbi-card:nth-child(6) { animation-delay: 0.6s; }
+
 		.lbi-card:hover {
-			transform: translateY(-8px);
-			box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);
+			transform: translateY(-12px) scale(1.02);
+			box-shadow: 0 20px 60px rgba(0, 0, 0, 0.16);
 		}
 
 		.lbi-card-image {
@@ -140,6 +249,11 @@ function lbi_home_page_shortcode() {
 			height: 250px;
 			object-fit: cover;
 			background-color: #e0e0e0;
+			transition: transform 0.6s var(--lbi-easing);
+		}
+
+		.lbi-card:hover .lbi-card-image {
+			transform: scale(1.05);
 		}
 
 		.lbi-card-body {
@@ -177,13 +291,26 @@ function lbi_home_page_shortcode() {
 			color: var(--lbi-gold);
 			text-decoration: none;
 			font-weight: 600;
-			display: inline-block;
+			display: inline-flex;
+			align-items: center;
+			gap: 0.5rem;
 			margin-top: auto;
-			transition: color 0.3s ease;
+			transition: all 0.3s var(--lbi-easing);
+			position: relative;
+		}
+
+		.lbi-card-link::after {
+			content: '→';
+			transition: transform 0.3s var(--lbi-easing);
 		}
 
 		.lbi-card-link:hover {
 			color: var(--lbi-dark);
+			gap: 0.75rem;
+		}
+
+		.lbi-card-link:hover::after {
+			transform: translateX(4px);
 		}
 
 		.lbi-empty-state {
