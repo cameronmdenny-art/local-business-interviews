@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Local Business Interviews
  * Description: Collects local business interview submissions, holds them for admin review, publishes interviews and directory listings upon approval.
- * Version:     1.0.2
+ * Version:     1.0.3
  * Author:      Your Name
  * Text Domain: local-business-interviews
  * Domain Path: /languages
@@ -30,7 +30,7 @@ if ( ! defined( 'LBI_PLUGIN_DIR' ) ) {
     define( 'LBI_PLUGIN_DIR', plugin_dir_path( __FILE__ ) );
 }
 if ( ! defined( 'LBI_PLUGIN_VERSION' ) ) {
-    define( 'LBI_PLUGIN_VERSION', '1.0.2' );
+    define( 'LBI_PLUGIN_VERSION', '1.0.3' );
 }
 
 // Optional configuration constants (set in wp-config.php or via mu-plugin):
@@ -68,56 +68,23 @@ LBI_Security::init();
 LBI_Emails::init();
 LBI_Assets::init(); // Load CSS and JS assets
 
-// AUTO-FIX: Ensure all required pages have content
-add_action( 'wp_loaded', function() {
-    if ( ! wp_is_json_request() && ! is_admin() ) {
-        LBI_CPT::ensure_all_pages();
-    }
-}, 0 );
+// Load custom header injector (injects header into any theme via WordPress hooks)
+require_once LBI_PLUGIN_DIR . 'includes/header-injector.php';
 
-// Auto-fix: Render recommend form directly if shortcode isn't processing
-add_action( 'wp', function() {
-    if ( is_admin() || ! is_page() || ! is_main_query() ) {
-        return;
+// Safe runtime fallback: render LBI shortcodes in page content without mutating DB content.
+add_filter( 'the_content', function( $content ) {
+    if ( is_admin() || ! is_singular( 'page' ) || ! is_main_query() ) {
+        return $content;
     }
-    
-    $post = get_post( get_the_ID() );
-    if ( ! $post || ( $post->post_name !== 'recommend' && $post->post_name !== 'recommend-a-business' ) ) {
-        return;
+
+    if ( false === strpos( $content, '[lbi_' ) ) {
+        return $content;
     }
-    
-    // Check if the page has the shortcode but not the rendered form
-    if ( strpos( $post->post_content, '[lbi_recommend_form]' ) !== false && 
-         strpos( $post->post_content, 'lbi-recommend-shortcode-wrap' ) === false ) {
-        
-        // Render the form
-        $form_html = do_shortcode( '[lbi_recommend_form]' );
-        
-        // Only update if do_shortcode actually produced output
-        if ( ! empty( $form_html ) && strpos( $form_html, 'lbi-recommend' ) !== false ) {
-            // Update post permanently
-            wp_update_post( array(
-                'ID'           => $post->ID,
-                'post_content' => $form_html,
-            ) );
-            
-            // Also flush cache if LiteSpeed is active
-            if ( function_exists( 'litespeed_purge_all' ) ) {
-                litespeed_purge_all();
-            }
-        }
-    }
-}, 999 ); // Very late priority
+
+    return do_shortcode( $content );
+}, 20 );
 
 LBI_Directory_Search::init();
-
-// Ensure recommend page exists (creates on every WordPress load)
-add_action( 'wp_loaded', function() {
-    if ( ! wp_is_json_request() ) {
-        LBI_CPT::create_recommend_page();
-        flush_rewrite_rules( false );
-    }
-}, 1 );
 
 // Load admin dashboard (runs only in admin)
 if ( is_admin() ) {
