@@ -42,6 +42,39 @@ jobs:
                "local-business-interviews/front-page.php.backup" \
                "local-business-interviews/*.zip"
         
+      - name: Prepare MU-Plugins for deployment
+        run: |
+          mkdir -p mu-plugins-deploy
+          cp mu-cairde-header-complete.php mu-plugins-deploy/
+          cp mu-local-legend-footer.php mu-plugins-deploy/
+          cp mu-master-cleanup.php mu-plugins-deploy/
+          cp INSTALL_LOCAL_LEGEND.php ./
+          echo "MU-Plugins prepared for deployment"
+          ls -la mu-plugins-deploy/
+        
+      - name: Deploy MU-Plugins to Hostinger
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+        with:
+          server: ${{ secrets.FTP_HOST }}
+          username: ${{ secrets.FTP_USER }}
+          password: ${{ secrets.FTP_PASSWORD }}
+          local-dir: ./mu-plugins-deploy/
+          server-dir: /public_html/wp-content/mu-plugins/
+          dangerous-clean-slate: false
+          
+      - name: Deploy Installer to Hostinger
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+        with:
+          server: ${{ secrets.FTP_HOST }}
+          username: ${{ secrets.FTP_USER }}
+          password: ${{ secrets.FTP_PASSWORD }}
+          local-dir: ./
+          server-dir: /public_html/
+          dangerous-clean-slate: false
+          exclude: |
+            **/*
+            !INSTALL_LOCAL_LEGEND.php
+            
       - name: Deploy Plugin to Hostinger
         uses: SamKirkland/FTP-Deploy-Action@v4.3.5
         with:
@@ -56,6 +89,7 @@ jobs:
             **/node_modules
             **/.github
             **/dist
+            **/mu-plugins-deploy
             **/build-release.sh
             **/.DS_Store
             **/front-page.php.backup
@@ -65,18 +99,5 @@ jobs:
             **/deploy-*.py
             **/deploy-*.php
             **/*.old
-            
-      - name: Deploy MU-Plugins to Hostinger
-        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
-        with:
-          server: ${{ secrets.FTP_HOST }}
-          username: ${{ secrets.FTP_USER }}
-          password: ${{ secrets.FTP_PASSWORD }}
-          local-dir: ./
-          server-dir: /public_html/wp-content/mu-plugins/
-          dangerous-clean-slate: false
-          exclude: |
-            **/*
-            !mu-cairde-header-complete.php
-            !mu-local-legend-footer.php
-            !mu-master-cleanup.php
+            **/INSTALL_LOCAL_LEGEND.php
+            **/upload_installer.py
