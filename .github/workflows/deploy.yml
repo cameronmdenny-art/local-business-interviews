@@ -42,13 +42,13 @@ jobs:
                "local-business-interviews/front-page.php.backup" \
                "local-business-interviews/*.zip"
         
-      - name: Deploy to Hostinger
+      - name: Deploy Plugin to Hostinger
         uses: SamKirkland/FTP-Deploy-Action@v4.3.5
         with:
           server: ${{ secrets.FTP_HOST }}
           username: ${{ secrets.FTP_USER }}
           password: ${{ secrets.FTP_PASSWORD }}
-          local-dir: ./local-business-interviews/
+          local-dir: ./
           server-dir: /public_html/wp-content/plugins/local-business-interviews/
           dangerous-clean-slate: false
           exclude: |
@@ -59,3 +59,24 @@ jobs:
             **/build-release.sh
             **/.DS_Store
             **/front-page.php.backup
+            **/mu-*.php
+            **/mu-*.old
+            **/deploy-*.sh
+            **/deploy-*.py
+            **/deploy-*.php
+            **/*.old
+            
+      - name: Deploy MU-Plugins to Hostinger
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+        with:
+          server: ${{ secrets.FTP_HOST }}
+          username: ${{ secrets.FTP_USER }}
+          password: ${{ secrets.FTP_PASSWORD }}
+          local-dir: ./
+          server-dir: /public_html/wp-content/mu-plugins/
+          dangerous-clean-slate: false
+          exclude: |
+            **/*
+            !mu-cairde-header-complete.php
+            !mu-local-legend-footer.php
+            !mu-master-cleanup.php
