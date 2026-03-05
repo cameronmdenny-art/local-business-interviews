@@ -1,0 +1,168 @@
+# ================================================================
+# CAIRDE DESIGNS - WORDPRESS SECURITY & CACHE RULES
+# ================================================================
+
+# Enable mod_rewrite
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    RewriteBase /
+</IfModule>
+
+# ================================================================
+# SECURITY HEADERS
+# ================================================================
+
+# Prevent access to WordPress installations
+<FilesMatch "^\.(?:env|git)|wp-config\.php">
+    <IfModule mod_authz_core.c>
+        Require all denied
+    </IfModule>
+    <IfModule !mod_authz_core.c>
+        Order allow,deny
+        Deny from all
+    </IfModule>
+</FilesMatch>
+
+# Disable directory listing
+<IfModule mod_autoindex.c>
+    Options -Indexes
+</IfModule>
+
+# Prevent execution of PHP in uploads (Apache-compatible in .htaccess)
+<IfModule mod_rewrite.c>
+    RewriteRule ^wp-content/uploads/.*\.php$ - [F,L]
+</IfModule>
+
+# Protect .htaccess and .htpasswd
+<Files ~ "^\.(htaccess|htpasswd)$">
+    <IfModule mod_authz_core.c>
+        Require all denied
+    </IfModule>
+    <IfModule !mod_authz_core.c>
+        Order allow,deny
+        Deny from all
+    </IfModule>
+</Files>
+
+# ================================================================
+# DISABLE XMLRPC IF NOT NEEDED
+# ================================================================
+<Files xmlrpc.php>
+    <IfModule mod_authz_core.c>
+        Require all denied
+    </IfModule>
+    <IfModule !mod_authz_core.c>
+        Order allow,deny
+        Deny from all
+    </IfModule>
+</Files>
+
+# ================================================================
+# PROTECT WP-INCLUDES
+# ================================================================
+<IfModule mod_rewrite.c>
+    RewriteRule ^wp-admin/includes/ - [F,L]
+    RewriteRule !^wp-includes/ - [S=3]
+    RewriteRule ^wp-includes/[^/]+\.php$ - [F,L]
+    RewriteRule ^wp-includes/js/tinymce/langs/.+\.php - [F,L]
+    RewriteRule ^wp-includes/theme-compat/ - [F,L]
+</IfModule>
+
+# ================================================================
+# LITESPEED CACHE CONFIGURATION
+# ================================================================
+
+# Disable caching for dynamic pages
+<FilesMatch "\.(html|htm)$">
+    <IfModule mod_expires.c>
+        ExpiresActive Off
+    </IfModule>
+</FilesMatch>
+
+# Cache bypass for homepage (already cached dynamically by theme)
+<FilesMatch "^index\.php$">
+    Header set Cache-Control "no-cache, no-store, must-revalidate"
+    Header set X-LiteSpeed-Cache-Control "no-cache"
+</FilesMatch>
+
+# ================================================================
+# SECURITY HEADERS
+# ================================================================
+
+# Prevent clickjacking
+Header always set X-Frame-Options "SAMEORIGIN"
+
+# Prevent MIME sniffing
+Header always set X-Content-Type-Options "nosniff"
+
+# Enable XSS protection in older browsers
+Header always set X-XSS-Protection "1; mode=block"
+
+# Referrer policy
+Header always set Referrer-Policy "strict-origin-when-cross-origin"
+
+# Permissions policy (formerly Feature Policy)
+Header always set Permissions-Policy "geolocation=(), microphone=(), camera=()"
+
+# ================================================================
+# COMPRESSION
+# ================================================================
+
+<IfModule mod_deflate.c>
+    AddOutputFilterByType DEFLATE text/html
+    AddOutputFilterByType DEFLATE text/plain
+    AddOutputFilterByType DEFLATE text/xml
+    AddOutputFilterByType DEFLATE text/css
+    AddOutputFilterByType DEFLATE text/javascript
+    AddOutputFilterByType DEFLATE application/javascript
+    AddOutputFilterByType DEFLATE application/x-javascript
+    AddOutputFilterByType DEFLATE application/json
+</IfModule>
+
+# ================================================================
+# CACHING RULES
+# ================================================================
+
+<IfModule mod_expires.c>
+    ExpiresActive On
+    
+    # Images
+    ExpiresByType image/jpeg "access plus 1 year"
+    ExpiresByType image/gif "access plus 1 year"
+    ExpiresByType image/png "access plus 1 year"
+    ExpiresByType image/webp "access plus 1 year"
+    ExpiresByType image/x-icon "access plus 1 year"
+    
+    # Media
+    ExpiresByType video/mp4 "access plus 1 year"
+    ExpiresByType audio/mpeg "access plus 1 year"
+    
+    # CSS & JS
+    ExpiresByType text/css "access plus 1 month"
+    ExpiresByType text/javascript "access plus 1 month"
+    ExpiresByType application/javascript "access plus 1 month"
+    
+    # Default
+    ExpiresDefault "access plus 2 days"
+</IfModule>
+
+# ================================================================
+# WORDPRESS DEFAULT RULES
+# ================================================================
+
+# Handle WordPress URLs
+<IfModule mod_rewrite.c>
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteRule . /index.php [L]
+</IfModule>
+
+# ================================================================
+# DISABLE POTENTIALLY DANGEROUS PHP FUNCTIONS
+# ================================================================
+
+# This helps if your host allows ini_set in .htaccess
+<IfModule mod_php.c>
+    php_flag display_errors off
+    php_value error_reporting 0
+</IfModule>

@@ -1,0 +1,128 @@
+<?php
+/**
+ * Plugin Name: Cairde Header Injector
+ * Description: Injects custom Cairde Designs header on homepage
+ * Version: 1.0
+ */
+
+if ( ! defined( 'ABSPATH' ) ) exit;
+
+// Inject on wp_head to ensure it loads very early
+add_action('wp_head', function() {
+    // Only on non-admin front-end, and only on homepage or main URL
+    if ( is_admin() ) return;
+    if ( ! is_front_page() && ! is_home() && $_SERVER['REQUEST_URI'] !== '/' ) return;
+    
+    $plugin_dir = WP_PLUGIN_DIR . '/local-business-interviews';
+    $logo_url = plugins_url('assets/images/cairde-logo.png', $plugin_dir . '/local-business-interviews.php');
+    ?>
+    <style>
+        /* Inject custom header CSS inline to ensure it loads */
+        <?php include $plugin_dir . '/assets/css/custom-header.css'; ?>
+    </style>
+    
+    <!-- Custom Cairde Designs Header - Injected via MU Plugin -->
+    <div class="cd-floating-header" id="cdHeader" style="position: fixed; top: 0; left: 0; right: 0; z-index: 9999; height: 100vh; display: flex; align-items: center; justify-content: center;">
+        <div class="cd-header-glass" style="pointer-events: auto; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3rem; padding: 4rem 2rem; background: rgba(255, 255, 255, 0.65); backdrop-filter: blur(40px); border-radius: 32px; border: 1px solid rgba(255, 255, 255, 0.8); max-width: 500px; margin: 0 auto;">
+            <!-- Logo Section -->
+            <div class="cd-logo-container">
+                <a href="<?php echo home_url('/'); ?>" class="cd-logo-link" style="display: inline-block; text-decoration: none;">
+                    <img src="<?php echo esc_url($logo_url); ?>" 
+                         alt="Cairde Designs" 
+                         class="cd-logo-img"
+                         style="max-width: 180px; max-height: 180px; display: block; margin: 0 auto; filter: drop-shadow(0 4px 12px rgba(191, 166, 115, 0.3));"
+                         onerror="this.style.display='none'; document.querySelector('.cd-logo-fallback').style.display='flex';">
+                    <div class="cd-logo-fallback" style="display: none; flex-direction: column; align-items: center; gap: 0.25rem;">
+                        <span style="font-size: 3rem; font-weight: 700; background: linear-gradient(135deg, #bfa673 0%, #d4c197 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; letter-spacing: -1px; line-height: 1;">Cairde</span>
+                        <span style="font-size: 1.5rem; font-weight: 300; color: #666; letter-spacing: 3px; text-transform: uppercase;">Designs</span>
+                    </div>
+                </a>
+                <p class="cd-tagline" style="margin: 1rem 0 0; font-size: 0.95rem; font-weight: 500; color: #666; letter-spacing: 0.5px; text-transform: uppercase;">Local Business Storytelling</p>
+            </div>
+            
+            <!-- Unique Vertical Navigation -->
+            <nav class="cd-nav-unique" style="width: 100%;">
+                <div class="cd-nav-grid" style="display: flex; flex-direction: column; gap: 0.75rem; width: 100%;">
+                    <a href="<?php echo home_url('/directory/'); ?>" class="cd-nav-item" style="display: flex; align-items: center; gap: 1rem; padding: 16px 24px; background: rgba(255, 255, 255, 0.6); border: 1px solid rgba(0, 0, 0, 0.06); border-radius: 16px; text-decoration: none; color: #1d1d1f; font-weight: 500; font-size: 1rem; cursor: pointer; transition: all 0.3s;">
+                        <span style="font-size: 1.5rem;">🗂</span>
+                        <span>Directory</span>
+                    </a>
+                    <a href="<?php echo home_url('/submit-interview/'); ?>" class="cd-nav-item" style="display: flex; align-items: center; gap: 1rem; padding: 16px 24px; background: rgba(255, 255, 255, 0.6); border: 1px solid rgba(0, 0, 0, 0.06); border-radius: 16px; text-decoration: none; color: #1d1d1f; font-weight: 500; font-size: 1rem; cursor: pointer; transition: all 0.3s;">
+                        <span style="font-size: 1.5rem;">✍️</span>
+                        <span>Submit</span>
+                    </a>
+                    <a href="<?php echo home_url('/recommend/'); ?>" class="cd-nav-item" style="display: flex; align-items: center; gap: 1rem; padding: 16px 24px; background: linear-gradient(135deg, rgba(191, 166, 115, 0.2) 0%, rgba(212, 193, 151, 0.1) 100%); border: 1px solid rgba(191, 166, 115, 0.3); border-radius: 16px; text-decoration: none; color: #1d1d1f; font-weight: 500; font-size: 1rem; cursor: pointer; transition: all 0.3s;">
+                        <span style="font-size: 1.5rem;">⭐</span>
+                        <span>Recommend</span>
+                    </a>
+                </div>
+            </nav>
+            
+            <!-- Scroll Indicator -->
+            <div class="cd-scroll-indicator" style="display: flex; flex-direction: column; align-items: center; gap: 0.5rem; margin-top: 1rem; opacity: 1; transition: all 0.3s ease;">
+                <div style="width: 24px; height: 24px; border-left: 2px solid #666; border-bottom: 2px solid #666; transform: rotate(-45deg); animation: bounce 2s infinite;"></div>
+                <span style="font-size: 0.75rem; font-weight: 600; color: #666; text-transform: uppercase; letter-spacing: 1px;">Explore</span>
+            </div>
+        </div>
+        
+        <!-- Ambient Background Effects -->
+        <div class="cd-header-bg-effects" style="position: absolute; inset: 0; pointer-events: none; z-index: -1; overflow: hidden;">
+            <div style="position: absolute; border-radius: 50%; filter: blur(80px); opacity: 0.15; width: 400px; height: 400px; background: radial-gradient(circle, #bfa673 0%, transparent 70%); top: 10%; left: 20%; animation: float 8s ease-in-out infinite;"></div>
+            <div style="position: absolute; border-radius: 50%; filter: blur(80px); opacity: 0.15; width: 300px; height: 300px; background: radial-gradient(circle, #d4c197 0%, transparent 70%); top: 60%; right: 15%; animation: float 10s ease-in-out infinite 2s;"></div>
+            <div style="position: absolute; border-radius: 50%; filter: blur(80px); opacity: 0.15; width: 350px; height: 350px; background: radial-gradient(circle, #bfa673 0%, transparent 70%); bottom: 20%; left: 10%; animation: float 12s ease-in-out infinite 4s;"></div>
+        </div>
+    </div>
+    
+    <style>
+        @keyframes bounce { 0%, 100% { transform: translateY(0) rotate(-45deg); } 50% { transform: translateY(10px) rotate(-45deg); } }
+        @keyframes float { 0%, 100% { transform: translate(0, 0); } 33% { transform: translate(30px, -30px); } 66% { transform: translate(-20px, 20px); } }
+    </style>
+    
+    <script>
+    // Smooth parallax and interactions
+    (function() {
+        const header = document.getElementById('cdHeader');
+        if (!header) return;
+        
+        let scrolled = false;
+        
+        window.addEventListener('scroll', function() {
+            const scrollY = window.pageYOffset;
+            
+            // Compact header on scroll
+            if (scrollY > 100 && !scrolled) {
+                header.classList.add('cd-header-scrolled');
+                header.style.height = '80px';
+                header.style.background = 'rgba(255, 255, 255, 0.72)';
+                header.style.backdropFilter = 'blur(20px) saturate(180%)';
+                scrolled = true;
+            } else if (scrollY <= 100 && scrolled) {
+                header.classList.remove('cd-header-scrolled');
+                header.style.height = '100vh';
+                header.style.background = 'transparent';
+                header.style.backdropFilter = 'none';
+                scrolled = false;
+            }
+            
+            // Parallax effect
+            const scrollIndicator = header.querySelector('.cd-scroll-indicator');
+            if (scrollIndicator && scrollY < 500) {
+                scrollIndicator.style.opacity = 1 - (scrollY / 500);
+                scrollIndicator.style.transform = `translateY(${scrollY * 0.3}px)`;
+            }
+        });
+        
+        // Nav item interactions
+        const navItems = header.querySelectorAll('.cd-nav-item');
+        navItems.forEach(item => {
+            item.addEventListener('mouseenter', function() {
+                this.style.transform = 'translateY(-4px) scale(1.05)';
+            });
+            item.addEventListener('mouseleave', function() {
+                this.style.transform = 'translateY(0) scale(1)';
+            });
+        });
+    })();
+    </script>
+    <?php
+});

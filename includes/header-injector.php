@@ -98,7 +98,7 @@ class LBI_Header_Injector {
 
             #lbi-global-header {
                 position: fixed;
-                top: 14px;
+                top: 10px;
                 left: 0;
                 right: 0;
                 z-index: 99999;
@@ -110,82 +110,145 @@ class LBI_Header_Injector {
             .lbi-global-header-container {
                 width: 100%;
                 max-width: 1180px;
-                padding: 0 20px;
+                padding: 0 18px;
                 display: flex;
                 justify-content: space-between;
                 align-items: center;
-                backdrop-filter: blur(20px);
-                background-color: rgba(255, 255, 255, 0.88);
-                border-radius: 24px;
-                padding-left: 20px;
-                padding-right: 20px;
-                height: 56px;
-                border: 1px solid rgba(195, 179, 145, 0.35);
+                gap: 16px;
+                backdrop-filter: blur(22px);
+                background: linear-gradient(130deg, rgba(22, 22, 22, 0.95) 0%, rgba(64, 64, 64, 0.72) 48%, rgba(18, 18, 18, 0.95) 100%);
+                border-radius: 16px;
+                height: 58px;
+                border: 1px solid rgba(195, 179, 145, 0.45);
+                box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
                 pointer-events: auto;
             }
 
             .lbi-logo {
-                font-weight: 700;
-                font-size: 20px;
-                letter-spacing: -0.5px;
                 display: flex;
                 gap: 10px;
                 align-items: center;
                 text-decoration: none;
+                min-width: 190px;
             }
 
             .lbi-logo img {
-                height: 40px;
+                height: 32px;
                 width: auto;
             }
 
             .lbi-logo-text {
-                color: var(--lbi-black);
+                color: #f7f7f7;
+                font-size: 12px;
+                line-height: 1.1;
+                letter-spacing: 0.06em;
+                text-transform: uppercase;
+                font-weight: 600;
+            }
+
+            .lbi-logo-text span {
+                color: var(--lbi-gold-hi);
+            }
+
+            .lbi-nav-wrap {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                flex: 1;
             }
 
             .lbi-nav-items {
                 display: flex;
-                gap: 2px;
+                gap: 6px;
                 list-style: none;
                 margin: 0;
                 padding: 0;
+                background: rgba(255, 255, 255, 0.05);
+                border: 1px solid rgba(195, 179, 145, 0.35);
+                border-radius: 12px;
+                padding: 3px;
             }
 
             .lbi-nav-items > li > a {
-                color: var(--lbi-black);
+                color: rgba(255, 255, 255, 0.92);
                 text-decoration: none;
-                padding: 8px 20px;
-                border-radius: 12px;
-                font-weight: 500;
-                font-size: 14px;
+                padding: 7px 12px;
+                border-radius: 9px;
+                font-weight: 600;
+                font-size: 11px;
+                letter-spacing: 0.01em;
                 transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             }
 
             .lbi-nav-items > li > a:hover {
-                background-color: rgba(195, 179, 145, 0.15);
-                color: var(--lbi-gold);
+                background-color: rgba(195, 179, 145, 0.2);
+                color: var(--lbi-gold-hi);
             }
 
             .lbi-nav-items > li.is-active > a {
-                background-color: rgba(195, 179, 145, 0.25);
-                color: var(--lbi-gold);
+                background-color: rgba(195, 179, 145, 0.28);
+                color: var(--lbi-gold-hi);
                 font-weight: 600;
+            }
+
+            .lbi-header-cta {
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+                min-width: 128px;
+                height: 36px;
+                padding: 0 14px;
+                border-radius: 10px;
+                border: 1px solid rgba(195, 179, 145, 0.55);
+                background: linear-gradient(140deg, rgba(195, 179, 145, 0.26), rgba(235, 215, 161, 0.14));
+                color: var(--lbi-gold-hi);
+                text-decoration: none;
+                font-size: 10px;
+                font-weight: 700;
+                letter-spacing: 0.06em;
+                text-transform: uppercase;
+                transition: all 0.25s ease;
+            }
+
+            .lbi-header-cta:hover {
+                transform: translateY(-1px);
+                background: linear-gradient(140deg, rgba(195, 179, 145, 0.4), rgba(235, 215, 161, 0.22));
+                color: #fff6db;
             }
 
             @media (max-width: 920px) {
                 .lbi-global-header-container {
                     max-width: 100%;
-                    border-radius: 0;
-                    padding: 12px 20px;
+                    border-radius: 12px;
+                    height: auto;
+                    min-height: 58px;
+                    padding: 8px 10px;
+                    flex-wrap: wrap;
+                    justify-content: center;
                 }
 
                 .lbi-logo-text {
                     display: none;
                 }
 
+                .lbi-logo {
+                    min-width: auto;
+                }
+
+                .lbi-nav-wrap {
+                    order: 3;
+                    width: 100%;
+                }
+
                 .lbi-nav-items > li > a {
-                    padding: 8px 14px;
-                    font-size: 12px;
+                    padding: 7px 10px;
+                    font-size: 10px;
+                }
+
+                .lbi-header-cta {
+                    min-width: 112px;
+                    height: 32px;
+                    font-size: 9px;
                 }
             }
         </style>
@@ -196,63 +259,93 @@ class LBI_Header_Injector {
         ?>
         <style id="lbi-global-footer-styles">
             #lbi-global-footer {
-                background-color: var(--lbi-black);
+                background: transparent;
                 color: var(--lbi-white);
-                padding: 40px 20px 80px;
+                padding: 18px 20px 50px;
             }
 
             .lbi-footer-container {
                 max-width: 1180px;
                 margin: 0 auto;
                 display: grid;
-                grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-                gap: 40px;
+                grid-template-columns: minmax(240px, 1.2fr) repeat(3, minmax(150px, 1fr));
+                gap: 26px;
+                background: linear-gradient(130deg, rgba(18, 18, 18, 0.98) 0%, rgba(36, 36, 36, 0.92) 45%, rgba(10, 10, 10, 0.98) 100%);
+                border: 1px solid rgba(195, 179, 145, 0.45);
+                border-radius: 16px;
+                padding: 22px 24px;
+                box-shadow: 0 14px 36px rgba(0, 0, 0, 0.35);
             }
 
             .lbi-footer-section h3 {
-                font-size: 18px;
+                font-size: 11px;
                 font-weight: 700;
-                margin-bottom: 20px;
-                color: var(--lbi-gold);
+                margin-bottom: 12px;
+                letter-spacing: 0.11em;
+                text-transform: uppercase;
+                color: var(--lbi-gold-hi);
+            }
+
+            .lbi-footer-brand {
+                display: flex;
+                align-items: flex-start;
+                gap: 10px;
+                margin-bottom: 10px;
+            }
+
+            .lbi-footer-brand img {
+                height: 30px;
+                width: auto;
+                margin-top: 1px;
+            }
+
+            .lbi-footer-brand-text {
+                color: #f5f5f5;
+                font-size: 11px;
+                letter-spacing: 0.08em;
+                line-height: 1.1;
+                font-weight: 600;
+                text-transform: uppercase;
             }
 
             .lbi-footer-section p,
             .lbi-footer-section a {
-                font-size: 14px;
-                line-height: 1.6;
-                margin-bottom: 12px;
-                color: rgba(255, 255, 255, 0.75);
+                font-size: 11px;
+                line-height: 1.35;
+                margin-bottom: 8px;
+                color: rgba(255, 255, 255, 0.72);
                 transition: color 0.2s;
                 text-decoration: none;
                 display: block;
             }
 
             .lbi-footer-section a:hover {
-                color: var(--lbi-gold);
+                color: var(--lbi-gold-hi);
             }
 
             .lbi-footer-bottom {
                 max-width: 1180px;
                 margin: 0 auto;
-                margin-top: 40px;
-                padding-top: 40px;
-                border-top: 1px solid rgba(195, 179, 145, 0.25);
+                margin-top: 14px;
+                padding-top: 10px;
                 text-align: center;
-                font-size: 12px;
-                color: rgba(255, 255, 255, 0.5);
+                font-size: 10px;
+                color: rgba(255, 255, 255, 0.45);
             }
 
             @media (max-width: 920px) {
                 #lbi-global-footer {
-                    padding: 30px 20px 60px;
+                    padding: 16px 16px 40px;
                 }
 
                 .lbi-footer-container {
-                    gap: 30px;
+                    grid-template-columns: 1fr;
+                    gap: 14px;
+                    padding: 18px;
                 }
 
                 .lbi-footer-section h3 {
-                    font-size: 16px;
+                    font-size: 10px;
                 }
             }
         </style>
@@ -272,8 +365,10 @@ class LBI_Header_Injector {
             <div class="lbi-global-header-container">
                 <a href="<?php echo esc_url( home_url( '/' ) ); ?>" class="lbi-logo" title="Local Legend Stories">
                     <img src="<?php echo esc_attr( $logo_url ); ?>" alt="Local Legend Logo">
-                    <span class="lbi-logo-text">LOCAL LEGEND STORIES</span>
+                    <span class="lbi-logo-text">LOCAL LEGEND<br><span>STORIES</span></span>
                 </a>
+
+                <div class="lbi-nav-wrap">
                 <nav>
                     <ul class="lbi-nav-items">
                         <?php foreach ( $nav_items as $item ) : ?>
@@ -283,6 +378,9 @@ class LBI_Header_Injector {
                         <?php endforeach; ?>
                     </ul>
                 </nav>
+                </div>
+
+                <a class="lbi-header-cta" href="<?php echo esc_url( home_url( '/recommend/' ) ); ?>">Get Featured</a>
             </div>
         </header>
         <script>
@@ -303,23 +401,33 @@ class LBI_Header_Injector {
             return;
         }
         self::$footer_rendered = true;
+        $logo_url = self::get_logo_url();
         ?>
         <footer id="lbi-global-footer">
             <div class="lbi-footer-container">
                 <div class="lbi-footer-section">
-                    <h3>About</h3>
-                    <p>Local Legend Stories showcases the people and businesses that make our community special.</p>
+                    <div class="lbi-footer-brand">
+                        <img src="<?php echo esc_attr( $logo_url ); ?>" alt="Local Legend Logo">
+                        <div class="lbi-footer-brand-text">Local Legend<br>Stories</div>
+                    </div>
+                    <p>Premium local storytelling for founders, neighbors, and communities that value meaningful business connections.</p>
                 </div>
                 <div class="lbi-footer-section">
                     <h3>Explore</h3>
                     <a href="<?php echo esc_url( home_url( '/directory/' ) ); ?>">Business Directory</a>
                     <a href="<?php echo esc_url( home_url( '/interviews/' ) ); ?>">Interviews</a>
-                    <a href="<?php echo esc_url( home_url( '/recommend/' ) ); ?>">Recommend</a>
+                    <a href="<?php echo esc_url( home_url( '/submit-interview/' ) ); ?>">Submit Interview</a>
                 </div>
                 <div class="lbi-footer-section">
-                    <h3>Connect</h3>
+                    <h3>Community</h3>
+                    <a href="<?php echo esc_url( home_url( '/recommend/' ) ); ?>">Recommend Business</a>
                     <a href="<?php echo esc_url( home_url( '/contact/' ) ); ?>">Contact</a>
-                    <a href="<?php echo esc_url( home_url( '/' ) ); ?>">Home</a>
+                    <a href="<?php echo esc_url( home_url( '/about/' ) ); ?>">About</a>
+                </div>
+                <div class="lbi-footer-section">
+                    <h3>Legal</h3>
+                    <a href="<?php echo esc_url( home_url( '/privacy-policy/' ) ); ?>">Privacy Policy</a>
+                    <a href="<?php echo esc_url( home_url( '/terms-of-service/' ) ); ?>">Terms of Service</a>
                 </div>
             </div>
             <div class="lbi-footer-bottom">

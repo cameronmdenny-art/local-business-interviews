@@ -1,0 +1,10 @@
+<IfModule LiteSpeed>
+  CacheLookup off
+  CacheDisable on
+  CacheControl max-age=0
+</IfModule>
+
+# Purge cache headers
+Header set Cache-Control "public, max-age=0, must-revalidate"
+Header set Pragma "no-cache"  
+Header set Expires "0"

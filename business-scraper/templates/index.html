@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#111214">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Cairde Leads">
+    <title>Business Scraper</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="manifest" href="{{ url_for('static', filename='manifest.webmanifest') }}">
+    <link rel="apple-touch-icon" href="{{ url_for('static', filename='cairde-logo.svg') }}">
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="brand-lockup">
+                <img class="brand-logo" src="{{ url_for('static', filename='cairde-logo.svg') }}" alt="Cairde Designs logo" onerror="this.style.display='none';document.getElementById('logoFallback').style.display='inline-flex';">
+                <div id="logoFallback" class="logo-fallback" style="display:none;">CD</div>
+                <div class="brand-text">
+                    <h1>High-Ticket Business Scraper</h1>
+                    <p>Cairde Designs lead intelligence dashboard</p>
+                </div>
+            </div>
+            <div class="account-bar">
+                <span>{{ current_user.full_name or current_user.email }}</span>
+                <a href="{{ url_for('logout') }}" class="btn btn-secondary btn-small">Logout</a>
+            </div>
+        </div>
+
+        <div class="main-content">
+            <!-- Search Form -->
+            <div class="search-section">
+                <h2>Start a New Scrape</h2>
+                <form id="scrapeForm">
+                    <div class="form-group">
+                        <label for="location">Location</label>
+                        <input 
+                            type="text" 
+                            id="location" 
+                            placeholder="e.g., Austin, TX" 
+                            required
+                        >
+                    </div>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="maxResults">Max Results</label>
+                            <select id="maxResults">
+                                <option value="10">10</option>
+                                <option value="20" selected>20</option>
+                                <option value="50">50</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="minRating">Min Rating</label>
+                            <input type="number" id="minRating" min="0" max="5" step="0.1" value="2.0">
+                        </div>
+                        <div class="form-group">
+                            <label for="maxRating">Max Rating</label>
+                            <input type="number" id="maxRating" min="0" max="5" step="0.1" value="5.0">
+                        </div>
+                        <div class="form-group">
+                            <label for="minReviews">Min Reviews</label>
+                            <input type="number" id="minReviews" min="0" step="1" value="0">
+                        </div>
+                        <div class="form-group">
+                            <label for="maxReviews">Max Reviews</label>
+                            <input type="number" id="maxReviews" min="0" step="1" placeholder="No max">
+                        </div>
+                        <div class="form-group">
+                            <label for="minPhotos">Min Photos</label>
+                            <input type="number" id="minPhotos" min="0" step="1" value="0">
+                        </div>
+                        <div class="form-group">
+                            <label for="maxPhotos">Max Photos</label>
+                            <input type="number" id="maxPhotos" min="0" step="1" placeholder="No max">
+                        </div>
+                    </div>
+                    <div class="type-picker">
+                        <div class="type-picker-header">
+                            <label>Business Types</label>
+                            <div class="inline-actions">
+                                <button type="button" class="btn btn-secondary btn-small" id="selectAllTypes">Select All</button>
+                                <button type="button" class="btn btn-secondary btn-small" id="clearAllTypes">Clear</button>
+                            </div>
+                        </div>
+                        <div id="businessTypeList" class="type-list"></div>
+                        <div id="selectedTypeCount" class="selected-count">Selected: 0</div>
+                    </div>
+                    <div class="checkbox-row">
+                        <label><input type="checkbox" id="requireWebsite"> Require website</label>
+                        <label><input type="checkbox" id="requireNoWebsite"> Only no website</label>
+                        <label><input type="checkbox" id="requireSocial"> Require social media URL</label>
+                        <label><input type="checkbox" id="requirePhone" checked> Require phone</label>
+                    </div>
+                    <button type="submit" class="btn btn-primary" id="submitBtn">
+                        🔍 Start Scrape
+                    </button>
+                </form>
+
+                <div style="margin-top: 20px;">
+                    <h3 style="margin-bottom: 10px; font-size: 14px; color: #666;">Recent Searches</h3>
+                    <div id="searchHistoryContainer" class="search-history-container">
+                        <p style="text-align: center; color: #999;">Loading...</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Progress Section (Hidden by default) -->
+            <div class="progress-section" id="progressSection" style="display:none;">
+                <h2>Scraping in Progress</h2>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progressFill"></div>
+                </div>
+                <p id="statusMessage">Starting scrape...</p>
+                <div class="spinner"></div>
+            </div>
+
+            <div class="results-filters" id="resultsFilters" style="display:none;">
+                <h2>Filter Displayed Results</h2>
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label for="viewMinRating">Min Rating</label>
+                        <input type="number" id="viewMinRating" min="0" max="5" step="0.1" value="0">
+                    </div>
+                    <div class="form-group">
+                        <label for="viewMaxRating">Max Rating</label>
+                        <input type="number" id="viewMaxRating" min="0" max="5" step="0.1" value="5">
+                    </div>
+                    <div class="form-group">
+                        <label for="viewMinReviews">Min Reviews</label>
+                        <input type="number" id="viewMinReviews" min="0" step="1" value="0">
+                    </div>
+                    <div class="form-group">
+                        <label for="viewMaxReviews">Max Reviews</label>
+                        <input type="number" id="viewMaxReviews" min="0" step="1" placeholder="No max">
+                    </div>
+                    <div class="form-group">
+                        <label for="viewMinPhotos">Min Photos</label>
+                        <input type="number" id="viewMinPhotos" min="0" step="1" value="0">
+                    </div>
+                    <div class="form-group">
+                        <label for="viewMaxPhotos">Max Photos</label>
+                        <input type="number" id="viewMaxPhotos" min="0" step="1" placeholder="No max">
+                    </div>
+                    <div class="form-group">
+                        <label for="viewWebsite">Website</label>
+                        <select id="viewWebsite">
+                            <option value="any">Any</option>
+                            <option value="yes">Has website</option>
+                            <option value="no">No website</option>
+                        </select>
+                    </div>
+                </div>
+                <button class="btn btn-secondary" id="applyViewFilters">Apply Display Filters</button>
+            </div>
+
+            <div class="map-results" id="mapResults" style="display:none;">
+                <h2>Map View</h2>
+                <div id="map"></div>
+                <h2>Found Businesses</h2>
+                <div id="resultCards" class="result-cards"></div>
+            </div>
+
+            <!-- Results Table -->
+            <div class="results-section">
+                <h2>Scrape History</h2>
+                <table id="resultsTable" class="results-table">
+                    <thead>
+                        <tr>
+                            <th>Location</th>
+                            <th>Date</th>
+                            <th>Status</th>
+                            <th>Businesses Found</th>
+                            <th>Duration</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tableBody">
+                        <tr class="empty-state">
+                            <td colspan="6">No scrapes yet. Start one above!</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+        <script>
+            if ('serviceWorker' in navigator) {
+                navigator.serviceWorker.register('{{ url_for('static', filename='sw.js') }}').catch(() => {});
+            }
+        </script>
+</body>
+</html>

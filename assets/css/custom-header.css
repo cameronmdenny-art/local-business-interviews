@@ -1,0 +1,480 @@
+/**
+ * Cairde Designs Custom Header
+ * Apple/Google-Inspired Unique Header with Glassmorphism
+ */
+
+/* ============================================
+   FLOATING HEADER CONTAINER
+   ============================================ */
+
+.cd-floating-header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 9999;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    pointer-events: none;
+    transition: all 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.cd-floating-header.cd-header-scrolled {
+    height: 80px;
+    background: rgba(255, 255, 255, 0.72);
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.cd-floating-header.cd-header-scrolled .cd-header-glass {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 40px;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    height: 80px;
+}
+
+.cd-floating-header.cd-header-scrolled .cd-logo-container {
+    margin-bottom: 0;
+    text-align: left;
+}
+
+.cd-floating-header.cd-header-scrolled .cd-logo-img {
+    max-width: 60px;
+    max-height: 60px;
+}
+
+.cd-floating-header.cd-header-scrolled .cd-tagline {
+    display: none;
+}
+
+.cd-floating-header.cd-header-scrolled .cd-nav-grid {
+    flex-direction: row;
+    gap: 0.5rem;
+}
+
+.cd-floating-header.cd-header-scrolled .cd-nav-item {
+    padding: 8px 16px;
+    min-width: auto;
+}
+
+.cd-floating-header.cd-header-scrolled .cd-nav-icon {
+    font-size: 1rem;
+}
+
+.cd-floating-header.cd-header-scrolled .cd-scroll-indicator {
+    display: none;
+}
+
+.cd-floating-header.cd-header-scrolled .cd-header-bg-effects {
+    display: none;
+}
+
+/* ============================================
+   GLASS CONTAINER
+   ============================================ */
+
+.cd-header-glass {
+    pointer-events: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 3rem;
+    padding: 4rem 2rem;
+    background: rgba(255, 255, 255, 0.65);
+    backdrop-filter: blur(40px) saturate(180%);
+    -webkit-backdrop-filter: blur(40px) saturate(180%);
+    border-radius: 32px;
+    border: 1px solid rgba(255, 255, 255, 0.8);
+    box-shadow: 
+        0 8px 32px rgba(0, 0, 0, 0.08),
+        0 1px 3px rgba(0, 0, 0, 0.05),
+        inset 0 1px 0 rgba(255, 255, 255, 0.9);
+    transition: all 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+    max-width: 500px;
+    margin: 0 auto;
+}
+
+.cd-header-glass:hover {
+    transform: translateY(-2px);
+    box-shadow: 
+        0 12px 48px rgba(0, 0, 0, 0.12),
+        0 2px 6px rgba(0, 0, 0, 0.08),
+        inset 0 1px 0 rgba(255, 255, 255, 1);
+}
+
+/* ============================================
+   LOGO SECTION
+   ============================================ */
+
+.cd-logo-container {
+    text-align: center;
+    margin-bottom: 1rem;
+    transition: all 0.3s ease;
+}
+
+.cd-logo-link {
+    display: inline-block;
+    text-decoration: none;
+    transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.cd-logo-link:hover {
+    transform: scale(1.05) rotate(-2deg);
+}
+
+.cd-logo-img {
+    max-width: 180px;
+    max-height: 180px;
+    width: auto;
+    height: auto;
+    display: block;
+    margin: 0 auto;
+    filter: drop-shadow(0 4px 12px rgba(191, 166, 115, 0.3));
+    transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.cd-logo-img:hover {
+    filter: drop-shadow(0 8px 24px rgba(191, 166, 115, 0.5));
+    transform: scale(1.02);
+}
+
+/* Logo Fallback */
+.cd-logo-fallback {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.25rem;
+}
+
+.cd-logo-text {
+    font-size: 3rem;
+    font-weight: 700;
+    background: linear-gradient(135deg, #bfa673 0%, #d4c197 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    letter-spacing: -1px;
+    line-height: 1;
+}
+
+.cd-logo-text-sub {
+    font-size: 1.5rem;
+    font-weight: 300;
+    color: #666;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+}
+
+.cd-tagline {
+    margin: 1rem 0 0;
+    font-size: 0.95rem;
+    font-weight: 500;
+    color: #666;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    opacity: 0;
+    animation: fadeSlideUp 0.6s ease-out 0.3s forwards;
+}
+
+/* ============================================
+   UNIQUE NAVIGATION GRID
+   ============================================ */
+
+.cd-nav-unique {
+    width: 100%;
+}
+
+.cd-nav-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    width: 100%;
+}
+
+.cd-nav-item {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 16px 24px;
+    background: rgba(255, 255, 255, 0.6);
+    border: 1px solid rgba(0, 0, 0, 0.06);
+    border-radius: 16px;
+    text-decoration: none;
+    color: #1d1d1f;
+    font-weight: 500;
+    font-size: 1rem;
+    transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    cursor: pointer;
+    min-width: 200px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+}
+
+.cd-nav-item:hover {
+    background: rgba(255, 255, 255, 0.9);
+    border-color: rgba(191, 166, 115, 0.3);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+    transform: translateY(-4px) scale(1.02);
+}
+
+.cd-nav-item-highlight {
+    background: linear-gradient(135deg, rgba(191, 166, 115, 0.2) 0%, rgba(212, 193, 151, 0.1) 100%);
+    border-color: rgba(191, 166, 115, 0.3);
+}
+
+.cd-nav-item-highlight:hover {
+    background: linear-gradient(135deg, rgba(191, 166, 115, 0.3) 0%, rgba(212, 193, 151, 0.2) 100%);
+    border-color: rgba(191, 166, 115, 0.5);
+}
+
+.cd-nav-icon {
+    font-size: 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.cd-nav-item:hover .cd-nav-icon {
+    transform: scale(1.2) rotate(5deg);
+}
+
+.cd-nav-label {
+    flex: 1;
+}
+
+/* ============================================
+   SCROLL INDICATOR
+   ============================================ */
+
+.cd-scroll-indicator {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    margin-top: 1rem;
+    opacity: 0;
+    animation: fadeSlideUp 0.6s ease-out 0.6s forwards;
+    transition: all 0.3s ease;
+}
+
+.cd-scroll-arrow {
+    width: 24px;
+    height: 24px;
+    border-left: 2px solid #666;
+    border-bottom: 2px solid #666;
+    transform: rotate(-45deg);
+    animation: bounce 2s infinite;
+}
+
+.cd-scroll-text {
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: #666;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+/* ============================================
+   AMBIENT BACKGROUND EFFECTS
+   ============================================ */
+
+.cd-header-bg-effects {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    overflow: hidden;
+    z-index: -1;
+}
+
+.cd-glow {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(80px);
+    opacity: 0.15;
+    transition: transform 3s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.cd-glow-1 {
+    width: 400px;
+    height: 400px;
+    background: radial-gradient(circle, #bfa673 0%, transparent 70%);
+    top: 10%;
+    left: 20%;
+    animation: float 8s ease-in-out infinite;
+}
+
+.cd-glow-2 {
+    width: 300px;
+    height: 300px;
+    background: radial-gradient(circle, #d4c197 0%, transparent 70%);
+    top: 60%;
+    right: 15%;
+    animation: float 10s ease-in-out infinite 2s;
+}
+
+.cd-glow-3 {
+    width: 350px;
+    height: 350px;
+    background: radial-gradient(circle, #bfa673 0%, transparent 70%);
+    bottom: 20%;
+    left: 10%;
+    animation: float 12s ease-in-out infinite 4s;
+}
+
+/* ============================================
+   ANIMATIONS
+   ============================================ */
+
+@keyframes fadeSlideUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes bounce {
+    0%, 100% {
+        transform: translateY(0) rotate(-45deg);
+    }
+    50% {
+        transform: translateY(10px) rotate(-45deg);
+    }
+}
+
+@keyframes float {
+    0%, 100% {
+        transform: translate(0, 0);
+    }
+    33% {
+        transform: translate(30px, -30px);
+    }
+    66% {
+        transform: translate(-20px, 20px);
+    }
+}
+
+/* ============================================
+   RESPONSIVE DESIGN
+   ============================================ */
+
+@media (max-width: 768px) {
+    .cd-header-glass {
+        padding: 3rem 1.5rem;
+        gap: 2rem;
+        border-radius: 24px;
+        max-width: 90%;
+    }
+    
+    .cd-logo-img {
+        max-width: 120px;
+        max-height: 120px;
+    }
+    
+    .cd-nav-item {
+        padding: 12px 20px;
+        font-size: 0.95rem;
+    }
+    
+    .cd-nav-icon {
+        font-size: 1.25rem;
+    }
+    
+    .cd-floating-header.cd-header-scrolled {
+        height: 70px;
+    }
+    
+    .cd-floating-header.cd-header-scrolled .cd-header-glass {
+        padding: 0 20px;
+        height: 70px;
+    }
+    
+    .cd-floating-header.cd-header-scrolled .cd-logo-img {
+        max-width: 50px;
+        max-height: 50px;
+    }
+}
+
+@media (max-width: 480px) {
+    .cd-header-glass {
+        padding: 2rem 1rem;
+        gap: 1.5rem;
+    }
+    
+    .cd-logo-img {
+        max-width: 100px;
+        max-height: 100px;
+    }
+    
+    .cd-tagline {
+        font-size: 0.8rem;
+    }
+    
+    .cd-nav-item {
+        padding: 10px 16px;
+        gap: 0.75rem;
+    }
+}
+
+/* ============================================
+   DARK MODE SUPPORT (Optional)
+   ============================================ */
+
+@media (prefers-color-scheme: dark) {
+    .cd-header-glass {
+        background: rgba(28, 28, 30, 0.85);
+        border-color: rgba(255, 255, 255, 0.15);
+    }
+    
+    .cd-floating-header.cd-header-scrolled {
+        background: rgba(28, 28, 30, 0.85);
+    }
+    
+    .cd-nav-item {
+        background: rgba(44, 44, 46, 0.6);
+        border-color: rgba(255, 255, 255, 0.1);
+        color: #f5f5f7;
+    }
+    
+    .cd-nav-item:hover {
+        background: rgba(44, 44, 46, 0.9);
+    }
+    
+    .cd-tagline,
+    .cd-scroll-text {
+        color: #98989d;
+    }
+    
+    .cd-scroll-arrow {
+        border-color: #98989d;
+    }
+}
+
+/* ============================================
+   ACCESSIBILITY
+   ============================================ */
+
+.cd-nav-item:focus {
+    outline: 2px solid #007aff;
+    outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+}

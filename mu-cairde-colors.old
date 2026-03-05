@@ -1,0 +1,283 @@
+<?php
+/**
+ * MU Plugin: Cairde Color Theme
+ * Description: Global white/black/gold color scheme for entire site
+ * Version: 1.0.0
+ */
+
+if ( ! defined( 'ABSPATH' ) ) {
+    exit;
+}
+
+// Inject global color theme at highest priority
+add_action( 'wp_head', function() {
+    if ( is_admin() ) {
+        return;
+    }
+    ?>
+    <style id="cairde-color-theme">
+        :root {
+            /* Cairde Color Palette - White/Black/Gold */
+            --lbi-primary: #b08a3c;
+            --lbi-primary-hover: #9a7630;
+            --lbi-text-primary: #111111;
+            --lbi-text-secondary: #6e6e73;
+            --lbi-bg-primary: #ffffff;
+            --lbi-bg-secondary: #faf9f7;
+            --lbi-border: #e5e1db;
+            --lbi-accent-gold: #b08a3c;
+            --lbi-accent-gold-light: #d4c5a9;
+            --lbi-accent-gold-dark: #8b6f2f;
+        }
+
+        /* Override focus states to use gold */
+        .lbi-form-group input:focus,
+        .lbi-form-group textarea:focus,
+        .lbi-form-group select:focus {
+            border-color: #b08a3c !important;
+            box-shadow: 
+                0 0 0 4px rgba(176, 138, 60, 0.12),
+                0 4px 12px rgba(0, 0, 0, 0.08) !important;
+        }
+
+        /* Gold accent on file hover */
+        .lbi-form-group input[type="file"]:hover {
+            border-color: #b08a3c !important;
+            background: rgba(176, 138, 60, 0.04) !important;
+        }
+
+        /* Gold checkbox/radio styling */
+        .lbi-form-group input[type="checkbox"]:checked,
+        .lbi-form-group input[type="radio"]:checked {
+            accent-color: #b08a3c !important;
+        }
+
+        /* Checkbox group gold styling */
+        .lbi-checkbox-item input[type="checkbox"]:checked + label {
+            background: rgba(176, 138, 60, 0.08) !important;
+            border-color: #b08a3c !important;
+            color: #b08a3c !important;
+        }
+
+        .lbi-checkbox-item label:hover {
+            background: rgba(176, 138, 60, 0.04) !important;
+            border-color: #e5e1db !important;
+        }
+
+        /* Submit button with gold gradient */
+        .lbi-form button[type="submit"],
+        .lbi-form input[type="submit"],
+        .lbi-submit-btn {
+            background: linear-gradient(135deg, #b08a3c 0%, #9a7630 100%) !important;
+            box-shadow: 
+                0 4px 16px rgba(176, 138, 60, 0.25),
+                0 0 0 0 rgba(176, 138, 60, 0.4) !important;
+        }
+
+        .lbi-form button[type="submit"]:hover {
+            background: linear-gradient(135deg, #9a7630 0%, #8b6f2f 100%) !important;
+            box-shadow: 
+                0 12px 32px rgba(176, 138, 60, 0.35),
+                0 0 0 0 rgba(176, 138, 60, 0) !important;
+        }
+
+        .lbi-form button[type="submit"]::before {
+            background: rgba(255, 255, 255, 0.25) !important;
+        }
+
+        /* Form accent bar - gold instead of blue gradient */
+        .lbi-form::before {
+            background: linear-gradient(90deg, 
+                #b08a3c 0%, 
+                #d4c5a9 50%, 
+                #b08a3c 100%) !important;
+        }
+
+        /* Form container - subtle gold tint */
+        .lbi-form {
+            background: rgba(255, 255, 255, 0.97) !important;
+            border: 1px solid rgba(176, 138, 60, 0.08) !important;
+        }
+
+        .lbi-form:hover {
+            border-color: rgba(176, 138, 60, 0.15) !important;
+        }
+
+        /* Focus visible keyboard navigation - gold */
+        :focus-visible {
+            outline: 2px solid #b08a3c !important;
+            outline-offset: 2px !important;
+        }
+
+        /* Links and interactive text - gold */
+        a:not([class*="lbi-"]),
+        .lbi-link {
+            color: #b08a3c;
+            transition: color 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+
+        a:not([class*="lbi-"]):hover,
+        .lbi-link:hover {
+            color: #8b6f2f;
+        }
+
+        /* Directory and card accent borders */
+        .lbi-directory-card,
+        .lbi-interview-card,
+        .lbi-card {
+            border-color: rgba(176, 138, 60, 0.1) !important;
+        }
+
+        .lbi-directory-card:hover,
+        .lbi-interview-card:hover,
+        .lbi-card:hover {
+            border-color: rgba(176, 138, 60, 0.25) !important;
+        }
+
+        /* Card title accent */
+        .lbi-directory-card h3,
+        .lbi-interview-card h3,
+        .lbi-card h3 {
+            color: #111111 !important;
+        }
+
+        .lbi-directory-card .lbi-category,
+        .lbi-interview-card .lbi-category,
+        .lbi-card .lbi-category {
+            background: rgba(176, 138, 60, 0.1) !important;
+            color: #8b6f2f !important;
+            border-color: rgba(176, 138, 60, 0.2) !important;
+        }
+
+        /* Light background sections remain white */
+        .lbi-bg-light,
+        .lbi-section-light {
+            background: #ffffff !important;
+        }
+
+        .lbi-bg-subtle,
+        .lbi-section-subtle {
+            background: #faf9f7 !important;
+        }
+
+        /* Search inputs and filters - gold accent */
+        .lbi-search-input {
+            border-color: rgba(176, 138, 60, 0.15) !important;
+        }
+
+        .lbi-search-input:focus {
+            border-color: #b08a3c !important;
+            box-shadow: 0 0 0 4px rgba(176, 138, 60, 0.1) !important;
+        }
+
+        .lbi-filter-btn,
+        .lbi-filter-active {
+            border-color: #b08a3c !important;
+            color: #b08a3c !important;
+        }
+
+        .lbi-filter-active {
+            background: rgba(176, 138, 60, 0.1) !important;
+        }
+
+        /* Pagination - gold active state */
+        .lbi-pagination a.current,
+        .pagination a.current,
+        .page-numbers.current {
+            background: #b08a3c !important;
+            color: #ffffff !important;
+            border-color: #b08a3c !important;
+        }
+
+        .lbi-pagination a:hover,
+        .pagination a:hover,
+        .page-numbers:hover {
+            border-color: #b08a3c !important;
+            color: #b08a3c !important;
+        }
+
+        /* Map and UI controls */
+        .leaflet-control-zoom-in,
+        .leaflet-control-zoom-out {
+            background: #ffffff !important;
+            color: #111111 !important;
+            border-color: rgba(176, 138, 60, 0.15) !important;
+        }
+
+        .leaflet-control-zoom-in:hover,
+        .leaflet-control-zoom-out:hover {
+            background: rgba(176, 138, 60, 0.1) !important;
+            border-color: #b08a3c !important;
+        }
+
+        /* Form section headers */
+        .lbi-form legend {
+            color: #111111 !important;
+        }
+
+        /* Help text remains neutral */
+        .lbi-form-group small,
+        .lbi-help-text {
+            color: #6e6e73 !important;
+        }
+
+        /* Disabled state - light gray */
+        .lbi-form button[type="submit"]:disabled {
+            background: #e5e1db !important;
+            color: #999999 !important;
+        }
+
+        /* Table striping - subtle gold tint */
+        .lbi-table tbody tr:nth-child(odd) {
+            background: rgba(176, 138, 60, 0.03) !important;
+        }
+
+        .lbi-table tbody tr:hover {
+            background: rgba(176, 138, 60, 0.08) !important;
+        }
+
+        /* Transitions smooth for all color changes */
+        a, button, input, textarea, select,
+        .lbi-card, .lbi-directory-card, .lbi-interview-card,
+        .lbi-checkbox-item label {
+            transition: color 0.35s cubic-bezier(0.22, 1, 0.36, 1),
+                        background 0.35s cubic-bezier(0.22, 1, 0.36, 1),
+                        border-color 0.35s cubic-bezier(0.22, 1, 0.36, 1),
+                        box-shadow 0.35s cubic-bezier(0.22, 1, 0.36, 1) !important;
+        }
+
+        /* Dark mode adjustments - keep light feel */
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --lbi-text-primary: #ffffff;
+                --lbi-text-secondary: #a1a1a6;
+                --lbi-bg-primary: #1d1d1f;
+                --lbi-bg-secondary: #2c2c2e;
+                --lbi-border: rgba(176, 138, 60, 0.2);
+            }
+
+            .lbi-form {
+                background: rgba(29, 29, 31, 0.98) !important;
+            }
+
+            .lbi-bg-light,
+            .lbi-section-light {
+                background: #2c2c2e !important;
+            }
+
+            .lbi-bg-subtle,
+            .lbi-section-subtle {
+                background: #3a3a3c !important;
+            }
+        }
+
+        /* Accessibility - reduced motion */
+        @media (prefers-reduced-motion: reduce) {
+            a, button, input, select, textarea,
+            .lbi-card, .lbi-directory-card, .lbi-interview-card {
+                transition: none !important;
+            }
+        }
+    </style>
+    <?php
+}, 1100 ); // Priority 1100 = after luxury motion (1200) but before mobile optimizer (1000)

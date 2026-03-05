@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512" role="img" aria-label="Cairde Designs logo">
+  <defs>
+    <linearGradient id="gold" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#f4d79a"/>
+      <stop offset="50%" stop-color="#c99b53"/>
+      <stop offset="100%" stop-color="#f1d08f"/>
+    </linearGradient>
+  </defs>
+  <rect x="0" y="0" width="512" height="512" fill="#0b0b0d"/>
+  <rect x="24" y="24" width="464" height="464" fill="none" stroke="url(#gold)" stroke-width="8"/>
+  <rect x="52" y="52" width="408" height="408" fill="none" stroke="url(#gold)" stroke-width="6" opacity="0.9"/>
+  <path d="M214 137c-54 0-98 43-98 96s44 96 98 96c23 0 45-8 62-22v-48h-44v20c-6 2-12 3-18 3-30 0-54-22-54-49s24-49 54-49c15 0 29 5 39 13l27-34c-18-16-41-26-66-26z" fill="url(#gold)"/>
+  <path d="M292 186h54c52 0 94 31 94 70s-42 70-94 70h-54V186zm50 37h-12v66h12c29 0 52-15 52-33s-23-33-52-33z" fill="url(#gold)"/>
+  <line x1="256" y1="120" x2="256" y2="392" stroke="url(#gold)" stroke-width="4" opacity="0.65"/>
+</svg>

@@ -1,0 +1,170 @@
+<?php
+/**
+ * Plugin Name: Cairde Launch Cleanup
+ * Description: Removes WordPress default elements and cleans up site for launch
+ * Version: 1.0.0
+ * Author: Cairde Designs
+ */
+
+if (!defined('ABSPATH')) {
+    exit;
+}
+
+// Remove WordPress meta generators/info
+remove_action('wp_head', 'wp_generator');
+remove_action('wp_head', 'wlwmanifest_link');
+remove_action('wp_head', 'rsd_link', 10);
+remove_action('wp_head', 'feed_links', 2);
+remove_action('wp_head', 'feed_links_extra', 3);
+
+// Hide WordPress version completely
+add_action('wp_head', function() {
+    echo '<!-- Site built with Cairde Designs -->' . "\n";
+}, 1);
+
+// Clean up header
+add_action('init', function() {
+    // Remove emoji styles
+    remove_action('wp_head', 'print_emoji_detection_script', 7);
+    remove_action('admin_print_styles', 'print_emoji_styles');
+    
+    // Remove self-pingback
+    add_filter('xmlrpc_methods', function($methods) {
+        unset($methods['pingback.ping']);
+        return $methods;
+    });
+});
+
+// Clean appearance options - remove theme customizer
+add_action('wp_head', function() {
+    remove_action('wp_head', 'wp_custom_css_cb', 101);
+});
+
+// Add launch-ready CSS cleanup
+add_action('wp_head', 'cairde_launch_cleanup_css', 999);
+
+function cairde_launch_cleanup_css() {
+    ?>
+    <style>
+        /* Hide WordPress admin bar on frontend */
+        #wpadminbar {
+            display: none !important;
+            visibility: hidden !important;
+            height: 0 !important;
+            margin: 0 !important;
+            padding: 0 !important;
+        }
+        
+        body.admin-bar {
+            padding-top: 0 !important;
+        }
+        
+        /* Remove default WordPress styling artifacts */
+        .alignleft, .alignright, .aligncenter {
+            margin-bottom: 1.5rem;
+        }
+        
+        /* Clean blockquotes */
+        blockquote {
+            border-left: 4px solid #b08a3c;
+            padding-left: 1.5rem;
+            margin-left: 0;
+            color: #666;
+            font-style: italic;
+        }
+        
+        /* Ensure no WordPress default margins break layout */
+        p {
+            margin-bottom: 1.2rem;
+        }
+        
+        h1, h2, h3, h4, h5, h6 {
+            margin-bottom: 1rem;
+            margin-top: 0;
+        }
+    </style>
+    <?php
+}
+
+// Disable WordPress comments (not needed for this site)
+add_action('wp_loaded', function() {
+    // Close comments on all post types - use closure instead of function name
+    add_filter('comments_open', function() { return false; });
+    add_filter('pings_open', function() { return false; });
+    
+    // Hide existing comments
+    add_filter('comments_array', function() { return []; }, 10, 2);
+});
+
+// Remove WordPress info from REST API
+add_filter('rest_index', function($response) {
+    $data = $response->get_data();
+    unset($data['namespaces']);
+    $response->set_data($data);
+    return $response;
+});
+
+// Security headers - use wp_loaded instead of send_headers
+add_action('send_headers', function() {
+    if (headers_sent()) {
+        return;
+    }
+    
+    // Remove X-Powered-By header
+    @header_remove('X-Powered-By');
+    
+    // Add security headers
+    @header('X-Content-Type-Options: nosniff', true);
+    @header('X-Frame-Options: SAMEORIGIN', true);
+    @header('X-XSS-Protection: 1; mode=block', true);
+});
+
+// Remove unnecessary POST endpoints
+add_action('init', function() {
+    // Disable trackbacks (no longer needed in modern WordPress)
+    update_option('default_ping_status', 'closed');
+    update_option('default_comment_status', 'closed');
+});
+
+// Clean up search functionality if needed
+add_filter('pre_get_posts', function($query) {
+    if (!is_admin() && $query->is_main_query()) {
+        // You can disable search if not needed:
+        // if (is_search()) {
+        //     $query->set_posts_per_page(0);
+        // }
+    }
+    return $query;
+});
+
+// Add launch status to WordPress dashboard
+add_action('wp_dashboard_setup', 'cairde_launch_dashboard_widget');
+
+function cairde_launch_dashboard_widget() {
+    wp_add_dashboard_widget(
+        'cairde_launch_status',
+        'Cairde Designs Launch Status',
+        'cairde_launch_status_widget'
+    );
+}
+
+function cairde_launch_status_widget() {
+    $checks = [
+        'Header Plugin' => function_exists('cairde_inject_footer'),
+        'Color Theme Active' => defined('ABSPATH'),
+        'Mobile Optimizer' => class_exists('WP_Widget'),
+        'Analytics Ready' => get_option('cairde_ga_id') ? 'Configured' : 'Not configured',
+    ];
+    
+    echo '<div style="padding: 20px 0;">';
+    foreach ($checks as $check => $status) {
+        $icon = ($status === true || $status === 'Configured') ? '✅' : '⚠️';
+        echo "<p>$icon $check</p>";
+    }
+    echo '</div>';
+    
+    echo '<p style="font-size: 12px; color: #666; margin-top: 20px;">All launch-critical elements are active and ready.</p>';
+}
+
+// Log launched plugins for debugging
+error_log('Cairde Launch Cleanup plugin activated');

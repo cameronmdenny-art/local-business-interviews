@@ -1,0 +1,217 @@
+<?php
+/**
+ * Plugin Name: Cairde Analytics
+ * Description: Google Analytics & tracking for Cairde Designs
+ * Version: 1.0.0
+ * Author: Cairde Designs
+ */
+
+if (!defined('ABSPATH')) {
+    exit;
+}
+
+// Add settings page to configure analytics
+add_action('admin_menu', 'cairde_analytics_menu');
+
+function cairde_analytics_menu() {
+    add_options_page(
+        'Cairde Analytics Settings',
+        'Cairde Analytics',
+        'manage_options',
+        'cairde-analytics',
+        'cairde_analytics_settings_page'
+    );
+}
+
+function cairde_analytics_settings_page() {
+    if (isset($_POST['cairde_analytics_save'])) {
+        check_admin_referer('cairde_analytics_settings');
+        update_option('cairde_ga_id', sanitize_text_field($_POST['cairde_ga_id']));
+        update_option('cairde_fb_pixel', sanitize_text_field($_POST['cairde_fb_pixel']));
+        echo '<div class="updated"><p>Settings saved!</p></div>';
+    }
+    
+    $ga_id = get_option('cairde_ga_id', '');
+    $fb_pixel = get_option('cairde_fb_pixel', '');
+    ?>
+    <div class="wrap">
+        <h1>Cairde Analytics Settings</h1>
+        <form method="post">
+            <?php wp_nonce_field('cairde_analytics_settings'); ?>
+            
+            <table class="form-table">
+                <tr>
+                    <th scope="row">
+                        <label for="cairde_ga_id">Google Analytics 4 Measurement ID</label>
+                    </th>
+                    <td>
+                        <input type="text" 
+                               id="cairde_ga_id" 
+                               name="cairde_ga_id" 
+                               value="<?php echo esc_attr($ga_id); ?>" 
+                               class="regular-text"
+                               placeholder="G-XXXXXXXXXX">
+                        <p class="description">Enter your GA4 Measurement ID (starts with G-)</p>
+                    </td>
+                </tr>
+                <tr>
+                    <th scope="row">
+                        <label for="cairde_fb_pixel">Facebook Pixel ID</label>
+                    </th>
+                    <td>
+                        <input type="text" 
+                               id="cairde_fb_pixel" 
+                               name="cairde_fb_pixel" 
+                               value="<?php echo esc_attr($fb_pixel); ?>" 
+                               class="regular-text"
+                               placeholder="123456789012345">
+                        <p class="description">Enter your Facebook Pixel ID (optional)</p>
+                    </td>
+                </tr>
+            </table>
+            
+            <p class="submit">
+                <input type="submit" 
+                       name="cairde_analytics_save" 
+                       class="button button-primary" 
+                       value="Save Settings">
+            </p>
+        </form>
+        
+        <hr>
+        
+        <h2>Setup Instructions</h2>
+        <ol>
+            <li>Create a Google Analytics 4 account at <a href="https://analytics.google.com" target="_blank">analytics.google.com</a></li>
+            <li>Get your Measurement ID (looks like G-XXXXXXXXXX)</li>
+            <li>Paste it above and save</li>
+            <li>Analytics will automatically be added to all pages</li>
+        </ol>
+        
+        <h3>Recommended Events to Track:</h3>
+        <ul>
+            <li>Form submissions (Submit Interview, Recommend Business)</li>
+            <li>Directory searches and filters</li>
+            <li>Interview views and engagement</li>
+            <li>Button clicks (CTA buttons)</li>
+            <li>Scroll depth on homepage</li>
+        </ul>
+    </div>
+    <?php
+}
+
+// Inject Google Analytics code
+add_action('wp_head', 'cairde_inject_analytics', 1);
+
+function cairde_inject_analytics() {
+    if (is_admin()) {
+        return;
+    }
+    
+    $ga_id = get_option('cairde_ga_id', '');
+    
+    if (!empty($ga_id)) {
+        ?>
+        <!-- Google Analytics 4 -->
+        <script async src="https://www.googletagmanager.com/gtag/js?id=<?php echo esc_attr($ga_id); ?>"></script>
+        <script>
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', '<?php echo esc_js($ga_id); ?>', {
+                'anonymize_ip': true,
+                'cookie_flags': 'SameSite=None;Secure'
+            });
+            
+            // Track custom events
+            document.addEventListener('DOMContentLoaded', function() {
+                // Track form submissions
+                document.querySelectorAll('form').forEach(function(form) {
+                    form.addEventListener('submit', function() {
+                        var formName = form.getAttribute('name') || form.getAttribute('class') || 'unknown';
+                        gtag('event', 'form_submit', {
+                            'event_category': 'engagement',
+                            'event_label': formName
+                        });
+                    });
+                });
+                
+                // Track CTA button clicks
+                document.querySelectorAll('.cd-btn, .cd-top-btn, .lbi-btn, .footer-cta-btn').forEach(function(btn) {
+                    btn.addEventListener('click', function() {
+                        var btnText = this.textContent.trim();
+                        gtag('event', 'cta_click', {
+                            'event_category': 'engagement',
+                            'event_label': btnText
+                        });
+                    });
+                });
+                
+                // Track scroll depth
+                var scrollDepths = [25, 50, 75, 90, 100];
+                var triggered = {};
+                
+                window.addEventListener('scroll', function() {
+                    var scrollPercent = (window.scrollY / (document.documentElement.scrollHeight - window.innerHeight)) * 100;
+                    
+                    scrollDepths.forEach(function(depth) {
+                        if (scrollPercent >= depth && !triggered[depth]) {
+                            triggered[depth] = true;
+                            gtag('event', 'scroll_depth', {
+                                'event_category': 'engagement',
+                                'event_label': depth + '%',
+                                'value': depth
+                            });
+                        }
+                    });
+                });
+            });
+        </script>
+        <?php
+    }
+    
+    // Facebook Pixel
+    $fb_pixel = get_option('cairde_fb_pixel', '');
+    
+    if (!empty($fb_pixel)) {
+        ?>
+        <!-- Facebook Pixel -->
+        <script>
+            !function(f,b,e,v,n,t,s)
+            {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+            n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+            if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+            n.queue=[];t=b.createElement(e);t.async=!0;
+            t.src=v;s=b.getElementsByTagName(e)[0];
+            s.parentNode.insertBefore(t,s)}(window, document,'script',
+            'https://connect.facebook.net/en_US/fbevents.js');
+            fbq('init', '<?php echo esc_js($fb_pixel); ?>');
+            fbq('track', 'PageView');
+        </script>
+        <noscript>
+            <img height="1" width="1" style="display:none"
+                 src="https://www.facebook.com/tr?id=<?php echo esc_attr($fb_pixel); ?>&ev=PageView&noscript=1"/>
+        </noscript>
+        <?php
+    }
+}
+
+// Add admin notice if analytics not configured
+add_action('admin_notices', 'cairde_analytics_admin_notice');
+
+function cairde_analytics_admin_notice() {
+    $ga_id = get_option('cairde_ga_id', '');
+    
+    if (empty($ga_id)) {
+        $screen = get_current_screen();
+        if ($screen && $screen->id !== 'settings_page_cairde-analytics') {
+            ?>
+            <div class="notice notice-warning is-dismissible">
+                <p><strong>Cairde Analytics:</strong> Analytics tracking is not configured. 
+                <a href="<?php echo admin_url('options-general.php?page=cairde-analytics'); ?>">Set it up now</a> 
+                to start tracking visitors.</p>
+            </div>
+            <?php
+        }
+    }
+}

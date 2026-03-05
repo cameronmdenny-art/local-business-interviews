@@ -1,0 +1,34 @@
+<?php
+/**
+ * Fix Privacy Policy Page
+ * Direct page creation for privacy-policy slug
+ */
+
+if (!defined('ABSPATH')) {
+    exit;
+}
+
+// Create privacy-policy page directly
+add_action('admin_init', 'cairde_fix_privacy_policy');
+
+function cairde_fix_privacy_policy() {
+    global $wpdb;
+    
+    $existing = $wpdb->get_var(
+        "SELECT ID FROM $wpdb->posts WHERE post_type = 'page' AND 
+        (post_name = 'privacy-policy' OR post_title = 'Privacy Policy') 
+        AND post_status = 'publish' LIMIT 1"
+    );
+    
+    if (!$existing) {
+        $wpdb->insert($wpdb->posts, [
+            'post_title' => 'Privacy Policy',
+            'post_name' => 'privacy-policy',
+            'post_content' => 'Privacy Policy - Your privacy is important to us. This page outlines our data protection practices.',
+            'post_type' => 'page',
+            'post_status' => 'publish',
+            'post_date' => current_time('mysql'),
+            'post_date_gmt' => current_time('mysql', true)
+        ]);
+    }
+}

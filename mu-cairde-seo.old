@@ -1,0 +1,94 @@
+<?php
+/**
+ * Plugin Name: Cairde SEO Optimizer
+ * Description: Clean site titles and meta descriptions for Cairde Designs
+ * Version: 1.0.0
+ * Author: Cairde Designs
+ */
+
+if (!defined('ABSPATH')) {
+    exit;
+}
+
+// Fix site title to show "Cairde Designs" instead of domain
+add_filter('wp_title', 'cairde_fix_title', 10, 2);
+add_filter('pre_get_document_title', 'cairde_fix_document_title', 10);
+
+function cairde_fix_title($title, $sep = '|') {
+    if (is_feed()) {
+        return $title;
+    }
+    
+    // Remove staging domain from titles
+    $title = str_replace('ivory-lark-138468.hostingersite.com', 'Cairde Designs', $title);
+    
+    // Clean up title
+    if (is_front_page() || is_home()) {
+        return 'Cairde Designs | Local Business Storytelling';
+    }
+    
+    return $title;
+}
+
+function cairde_fix_document_title($title) {
+    if (is_front_page() || is_home()) {
+        return 'Cairde Designs | Local Business Storytelling';
+    }
+    
+    // Remove staging domain
+    $title = str_replace('ivory-lark-138468.hostingersite.com', 'Cairde Designs', $title);
+    
+    return $title;
+}
+
+// Add proper meta descriptions
+add_action('wp_head', 'cairde_add_meta_descriptions', 1);
+
+function cairde_add_meta_descriptions() {
+    $description = '';
+    
+    if (is_front_page() || is_home()) {
+        $description = 'Discover authentic local business stories and interviews. Connect with quality businesses in your community through Cairde Designs.';
+    } elseif (is_singular('interview')) {
+        global $post;
+        if ($post && $post->post_excerpt) {
+            $description = wp_strip_all_tags($post->post_excerpt);
+        } else {
+            $description = 'Read this exclusive local business interview and discover their story.';
+        }
+    } elseif (is_post_type_archive('directory') || is_page('directory')) {
+        $description = 'Browse our curated directory of quality local businesses. Find trusted services and products in your community.';
+    } elseif (is_page('recommend')) {
+        $description = 'Know a great local business? Recommend them to be featured in our community spotlight.';
+    } elseif (is_page('submit-interview')) {
+        $description = 'Share your business story with the community. Submit your interview for consideration.';
+    }
+    
+    if (!empty($description)) {
+        // Remove any existing description meta tags
+        remove_action('wp_head', 'rel_canonical');
+        echo '<meta name="description" content="' . esc_attr($description) . '">' . "\n";
+    }
+    
+    // Add Open Graph tags for social sharing
+    echo '<meta property="og:site_name" content="Cairde Designs">' . "\n";
+    echo '<meta property="og:type" content="website">' . "\n";
+    
+    if (is_front_page() || is_home()) {
+        echo '<meta property="og:title" content="Cairde Designs | Local Business Storytelling">' . "\n";
+        echo '<meta property="og:description" content="' . esc_attr($description) . '">' . "\n";
+    }
+}
+
+// Change site name in various places
+add_filter('bloginfo', 'cairde_fix_bloginfo', 10, 2);
+
+function cairde_fix_bloginfo($output, $show) {
+    if ($show === 'name') {
+        return 'Cairde Designs';
+    }
+    if ($show === 'description') {
+        return 'Local Business Storytelling';
+    }
+    return $output;
+}

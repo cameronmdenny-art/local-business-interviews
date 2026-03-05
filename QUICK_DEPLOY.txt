@@ -1,0 +1,56 @@
+# QUICK DEPLOYMENT GUIDE
+
+## What's Been Fixed
+- ✅ Header logo (now shows Cairde Designs)
+- ✅ URL link (ivory-lark-138468.hostingersite.com is hidden)
+- ✅ Duplicate menus (now only one clean navigation)
+- ✅ WordPress elements (all hidden, clean layout)
+
+## Files Ready
+
+These 2 files are ready in `/Users/camerondenny/Desktop/local-business-interviews/`:
+
+1. **mu-master-cleanup.php** (11 KB)
+2. **mu-cairde-header-complete.php** (7.3 KB)
+
+## How to Deploy
+
+### Using cPanel File Manager (Easiest)
+
+1. Go to: https://hostinger.com/ → Login → cPanel
+2. Find "File Manager" 
+3. Open `/public_html/`
+4. Click "Upload"
+5. Select both files from:
+   `/Users/camerondenny/Desktop/local-business-interviews/`
+6. Upload them
+7. Go to Hostinger cPanel → LiteSpeed Cache Manager
+8. Click "Purge All"
+9. Wait 1-2 minutes
+10. Visit your site: https://ivory-lark-138468.hostingersite.com/
+
+### Using FTP Client (FileZilla, Cyberduck, etc.)
+
+1. Connect to: `185.164.108.209`
+2. Username: From your Hostinger account
+3. Navigate to `/public_html/`
+4. Drag and drop both files
+5. Wait for upload to complete
+6. Clear cache (see step 7 above)
+
+## What You'll See After
+
+✅ Professional "Cairde Designs" header at top  
+✅ "Local Business Storytelling" underneath  
+✅ Three menu items: Directory | Submit Interview | Recommend  
+✅ NO domain URL visible  
+✅ NO WordPress theme showing  
+✅ Clean, professional appearance  
+
+## That's It!
+
+No configuration needed. The plugins auto-activate.
+
+---
+
+**Questions?** Check `DEPLOYMENT_READY.md` for detailed instructions and troubleshooting.

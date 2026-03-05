@@ -1,0 +1,17 @@
+<?php
+/**
+ * Plugin Name: MU Plugin Test
+ * Description: Simple test to verify MU plugins work
+ */
+
+// Add a comment to page source
+add_action('wp_head', function() {
+    echo "<!-- MU Plugins ARE working! -->\n";
+}, 1);
+
+// Also add to footer with visible marker
+add_action('wp_footer', function() {
+    echo "<!-- MU Plugin Footer Test: SUCCESS -->\n";
+    echo "<div id='mu-test' style='display:none;'>MU_WORKING</div>\n";
+}, 99999);
+?>

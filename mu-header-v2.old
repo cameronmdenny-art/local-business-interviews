@@ -1,0 +1,104 @@
+<?php
+/**
+ * Plugin Name: Cairde Header Injector v2
+ * Description: Bulletproof header injection
+ * Version: 2.0
+ */
+
+if ( ! defined( 'ABSPATH' ) ) exit;
+
+// Simple direct injection via output buffering - works everywhere
+add_action('init', function() {
+    if ( is_admin() ) return;
+    ob_start('cairde_inject_header');
+}, 1);
+
+function cairde_inject_header($content) {
+    // Don't double-inject
+    if ( strpos($content, 'cd-floating-header') !== false ) {
+        return $content;
+    }
+    
+    // Find body tag
+    $body_pos = stripos($content, '<body');
+    if ( $body_pos === false ) {
+        return $content;
+    }
+    
+    // Find end of body tag
+    $body_end = stripos($content, '>', $body_pos) + 1;
+    
+    // Insert header right after opening body tag
+    $header = get_cairde_header();
+    $content = substr($content, 0, $body_end) . $header . substr($content, $body_end);
+    
+    return $content;
+}
+
+function get_cairde_header() {
+    $home = home_url('/');
+    
+    return '
+<!-- Cairde Header - MU Plugin v2 -->
+<div id="cdHeader" style="position:fixed;top:0;left:0;right:0;z-index:99999;height:100vh;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,rgba(250,250,225,0.97) 0%,rgba(230,245,255,0.97) 100%);pointer-events:none;font-family:Manrope,sans-serif;">
+    <div style="pointer-events:auto;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2.5rem;padding:3rem 2rem;background:rgba(255,255,255,0.88);backdrop-filter:blur(50px) saturate(180%);border-radius:40px;border:1px solid rgba(255,255,255,0.95);box-shadow:0 25px 75px rgba(0,0,0,0.15);max-width:520px;width:92%;">
+        <div style="text-align:center;margin-top:0.5rem;">
+            <div style="font-size:3rem;font-weight:900;background:linear-gradient(135deg,#bfa673 0%,#d4c197 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;letter-spacing:-1.5px;line-height:1.1;margin:0;">Cairde Designs</div>
+            <p style="margin:1.25rem 0 0;font-size:0.95rem;font-weight:700;color:#999;letter-spacing:1.5px;text-transform:uppercase;">Local Business Storytelling</p>
+        </div>
+        <nav style="width:100%;display:flex;flex-direction:column;gap:1.25rem;">
+            <a href="' . $home . 'directory/" style="display:flex;align-items:center;gap:1.25rem;padding:18px 24px;background:rgba(255,255,255,0.85);border:2px solid rgba(191,166,115,0.25);border-radius:20px;text-decoration:none;color:#222;font-weight:800;font-size:1.05rem;transition:all 0.3s ease;cursor:pointer;">
+                <span style="font-size:1.6rem;">🗂️</span>
+                <span>Directory</span>
+            </a>
+            <a href="' . $home . 'submit-interview/" style="display:flex;align-items:center;gap:1.25rem;padding:18px 24px;background:rgba(255,255,255,0.85);border:2px solid rgba(191,166,115,0.25);border-radius:20px;text-decoration:none;color:#222;font-weight:800;font-size:1.05rem;transition:all 0.3s ease;cursor:pointer;">
+                <span style="font-size:1.6rem;">✍️</span>
+                <span>Submit Interview</span>
+            </a>
+            <a href="' . $home . 'recommend/" style="display:flex;align-items:center;gap:1.25rem;padding:18px 24px;background:linear-gradient(135deg,rgba(191,166,115,0.35) 0%,rgba(212,193,151,0.25) 100%);border:2px solid rgba(191,166,115,0.6);border-radius:20px;text-decoration:none;color:#222;font-weight:800;font-size:1.05rem;transition:all 0.3s ease;cursor:pointer;">
+                <span style="font-size:1.6rem;">⭐</span>
+                <span>Recommend Business</span>
+            </a>
+        </nav>
+        <div style="display:flex;flex-direction:column;align-items:center;gap:0.75rem;">
+            <div style="width:24px;height:24px;border-left:3px solid #999;border-bottom:3px solid #999;transform:rotate(-45deg);animation:cdBounce 2.5s infinite;"></div>
+            <span style="font-size:0.8rem;font-weight:900;color:#999;letter-spacing:2px;text-transform:uppercase;">Scroll</span>
+        </div>
+    </div>
+</div>
+<style>
+@keyframes cdBounce {
+    0%,100% { transform:translateY(0) rotate(-45deg);opacity:0.4; }
+    50% { transform:translateY(14px) rotate(-45deg);opacity:1; }
+}
+#cdHeader a { position:relative; }
+#cdHeader a:hover {
+    transform:translateY(-5px);
+    box-shadow:0 15px 40px rgba(0,0,0,0.2);
+}
+body.cd-scrolled #cdHeader {
+    transform:translateY(-100vh);
+    transition:transform 0.5s cubic-bezier(0.25,0.46,0.45,0.94);
+    pointer-events:none;
+}
+</style>
+<script>
+console.log("✅ Cairde Header Injected - MU Plugin v2 Active");
+const h=document.getElementById("cdHeader");
+if(h){
+    let last=0;
+    window.addEventListener("scroll",()=>{
+        const y=window.pageYOffset;
+        if(y>150){
+            document.body.classList.add("cd-scrolled");
+        }else{
+            document.body.classList.remove("cd-scrolled");
+        }
+        const ind=h.querySelector("[style*=animation]");
+        if(ind) ind.style.opacity=Math.max(0,1-y/150);
+    },{passive:true});
+}
+</script>
+';
+}
+?>

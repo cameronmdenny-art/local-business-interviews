@@ -1,0 +1,43 @@
+<?php
+/**
+ * MU Plugin: Disable LiteSpeed Cache for Homepage
+ * 
+ * This MU plugin disables page caching for the homepage to ensure
+ * the latest header design shows immediately after deployment.
+ * 
+ * Must-use plugins autodisable page caching for homepage.
+ */
+
+if ( ! defined( 'ABSPATH' ) ) exit;
+
+// Only run on the main site, front-end
+if ( is_admin() || defined( 'WP_CLI' ) ) return;
+
+// Hook into template_redirect (after WordPress determines what page to load)
+add_action( 'template_redirect', function() {
+    
+    // Check if this is the homepage
+    if ( ! is_front_page() ) return;
+    
+    // Disable LiteSpeed Cache for this page
+    define( 'LSCACHE_NO_CACHE', true );
+    
+    // Send headers to prevent caching at ALL levels
+    header( 'X-LiteSpeed-Cache-Control: no-cache' );
+    header( 'Cache-Control: no-cache, no-store, must-revalidate, max-age=0, s-maxage=0' );
+    header( 'Pragma: no-cache' );
+    header( 'Expires: 0' );
+    header( 'X-Cache-Control: no-store' );
+    header( 'X-LiteSpeed-Purge: *' );
+    
+    // Output a comment with timestamp to break the cache
+    add_filter( 'the_content', function( $content ) {
+        return '<!-- Cache-Bust: ' . time() . ' -->' . $content;
+    }, 1 );
+    
+}, 1 );
+
+// Also prevent caching via nocache option
+if ( ! defined( 'LSCACHE_NO_CACHE' ) ) {
+    define( 'LSCACHE_NO_CACHE', true );
+}

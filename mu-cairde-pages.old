@@ -1,0 +1,70 @@
+<?php
+/**
+ * Plugin Name: Cairde Missing Pages Creator
+ * Description: Creates essential pages (Blog, Contact, FAQ, Privacy, Terms) if they don't exist
+ * Version: 3.0.0
+ * Author: Cairde Designs
+ */
+
+if (!defined('ABSPATH')) {
+    exit;
+}
+
+// Simple page creation on shutdown
+add_action('shutdown', 'cairde_create_pages_safely', 999);
+
+function cairde_create_pages_safely() {
+    // Only create pages if not already created
+    $option = get_option('cairde_pages_created');
+    if ($option) {
+        return;
+    }
+    
+    global $wpdb;
+    
+    $pages = [
+        ['title' => 'Blog', 'name' => 'blog'],
+        ['title' => 'Contact', 'name' => 'contact'],
+        ['title' => 'FAQ', 'name' => 'faq'],
+        ['title' => 'Privacy Policy', 'name' => 'privacy-policy'],
+        ['title' => 'Terms of Service', 'name' => 'terms']
+    ];
+    
+    foreach ($pages as $page) {
+        // Check if page exists
+        $existing = $wpdb->get_var($wpdb->prepare(
+            "SELECT ID FROM $wpdb->posts WHERE post_type = 'page' AND post_name = %s AND post_status = 'publish'",
+            $page['name']
+        ));
+        
+        if (!$existing) {
+            // Insert page
+            $wpdb->insert($wpdb->posts, [
+                'post_title' => $page['title'],
+                'post_name' => $page['name'],
+                'post_content' => get_cairde_page_content($page['name']),
+                'post_type' => 'page',
+                'post_status' => 'publish',
+                'post_date' => current_time('mysql'),
+                'post_date_gmt' => current_time('mysql', true)
+            ]);
+        }
+    }
+    
+    // Mark as created
+    update_option('cairde_pages_created', '1');
+}
+
+function get_cairde_page_content($slug) {
+    $content = [
+        'blog' => 'Local Business Stories - Discover authentic stories, tips, and insights from local business owners.',
+        'contact' => 'Get in Touch - We\'d love to hear from you about potential partnerships and collaborations.',
+        'faq' => 'Frequently Asked Questions - Find answers to common questions about Cairde Designs.',
+        'privacy-policy' => 'Privacy Policy - Your privacy is important to us. This page outlines our data protection practices.',
+        'terms' => 'Terms of Service - These terms govern your use of the Cairde Designs website.'
+    ];
+    
+    return $content[$slug] ?? '';
+}
+
+

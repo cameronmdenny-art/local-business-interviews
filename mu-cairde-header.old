@@ -1,0 +1,125 @@
+<?php
+/**
+ * Plugin Name: Cairde Header Injector  
+ * Description: Injects custom Cairde Designs header on homepage
+ * Version: 1.0.2
+ */
+
+if ( ! defined( 'ABSPATH' ) ) exit;
+
+// Hook into wp_footer to inject at the end of body (always reliable)
+add_action('wp_footer', function() {
+    // Only on non-admin front-end
+    if ( is_admin() ) return;
+    
+    // Show on homepage, home, root URL, OR 404 pages (since site homepage may not be configured)
+    $show_header = is_front_page() || is_home() || is_404() || $_SERVER['REQUEST_URI'] === '/' ||  $_SERVER['REQUEST_URI'] === '';
+    
+    if ( ! $show_header ) return;
+    
+    // Get logo URL - use fallback if plugin not found
+    $logo_url = '';
+    if ( defined('WP_PLUGIN_DIR') && file_exists(WP_PLUGIN_DIR . '/local-business-interviews/assets/images/cairde-logo.png') ) {
+        $logo_url = plugins_url('assets/images/cairde-logo.png', WP_PLUGIN_DIR . '/local-business-interviews/local-business-interviews.php');
+    }
+    ?>
+    <!-- Cairde Designs Custom Header - Injected by MU Plugin -->
+    <div class="cd-floating-header" id="cdHeader" style="position: fixed; top: 0; left: 0; right: 0; z-index: 99999; height: 100vh; display: flex; align-items: center; justify-content: center; background: linear-gradient(135deg, rgba(250, 250, 225, 0.95) 0%, rgba(230, 245, 255, 0.95) 100%); pointer-events: none;">
+        <div class="cd-header-glass" style="pointer-events: auto; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2.5rem; padding: 3rem 2rem; background: rgba(255, 255, 255, 0.75); backdrop-filter: blur(40px) saturate(180%); border-radius: 32px; border: 1px solid rgba(255, 255, 255, 0.9); box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1); max-width: 480px; width: 90%; margin: 0 auto;">
+            
+            <!-- Logo Section -->
+            <div class="cd-logo-container" style="text-align: center;">
+                <?php if ( $logo_url ): ?>
+                <a href="<?php echo home_url('/'); ?>" style="display: inline-block; text-decoration: none;">
+                    <img src="<?php echo esc_url($logo_url); ?>" 
+                         alt="Cairde Designs" 
+                         style="max-width: 160px; max-height: 160px; display: block; margin: 0 auto; filter: drop-shadow(0 4px 12px rgba(191, 166, 115, 0.3));"
+                         onerror="this.style.display='none';">
+                </a>
+                <?php endif; ?>
+                <div style="margin-top: 1rem;">
+                    <div style="font-size: 2.5rem; font-weight: 700; background: linear-gradient(135deg, #bfa673 0%, #d4c197 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; letter-spacing: -1px; line-height: 1;">Cairde Designs</div>
+                    <p style="margin: 0.75rem 0 0; font-size: 0.9rem; font-weight: 600; color: #777; letter-spacing: 0.5px; text-transform: uppercase;">Local Business Storytelling</p>
+                </div>
+            </div>
+            
+            <!-- Navigation -->
+            <nav style="width: 100%;">
+                <div style="display: flex; flex-direction: column; gap: 0.75rem; width: 100%;">
+                    <a href="<?php echo home_url('/directory/'); ?>" style="display: flex; align-items: center; gap: 1rem; padding: 16px 24px; background: rgba(255, 255, 255, 0.7); border: 1px solid rgba(0, 0, 0, 0.08); border-radius: 16px; text-decoration: none; color: #1d1d1f; font-weight: 600; font-size: 1rem; transition: all 0.2s;">
+                        <span style="font-size: 1.5rem;">🗂️</span>
+                        <span>Directory</span>
+                    </a>
+                    <a href="<?php echo home_url('/submit-interview/'); ?>" style="display: flex; align-items: center; gap: 1rem; padding: 16px 24px; background: rgba(255, 255, 255, 0.7); border: 1px solid rgba(0, 0, 0, 0.08); border-radius: 16px; text-decoration: none; color: #1d1d1f; font-weight: 600; font-size: 1rem; transition: all 0.2s;">
+                        <span style="font-size: 1.5rem;">✍️</span>
+                        <span>Submit Interview</span>
+                    </a>
+                    <a href="<?php echo home_url('/recommend/'); ?>" style="display: flex; align-items: center; gap: 1rem; padding: 16px 24px; background: linear-gradient(135deg, rgba(191, 166, 115, 0.25) 0%, rgba(212, 193, 151, 0.15) 100%); border: 1px solid rgba(191, 166, 115, 0.4); border-radius: 16px; text-decoration: none; color: #1d1d1f; font-weight: 600; font-size: 1rem; transition: all 0.2s;">
+                        <span style="font-size: 1.5rem;">⭐</span>
+                        <span>Recommend a Business</span>
+                    </a>
+                </div>
+            </nav>
+            
+            <!-- Scroll Indicator -->
+            <div class="cd-scroll-indicator" style="display: flex; flex-direction: column; align-items: center; gap: 0.5rem; opacity: 0.8;">
+                <div style="width: 20px; height: 20px; border-left: 2px solid #888; border-bottom: 2px solid #888; transform: rotate(-45deg); animation: cd-bounce 2s infinite;"></div>
+                <span style="font-size: 0.7rem; font-weight: 700; color: #888; text-transform: uppercase; letter-spacing: 1.5px;">Scroll to Explore</span>
+            </div>
+        </div>
+    </div>
+    
+    <style>
+        @keyframes cd-bounce {
+            0%, 100% { transform: translateY(0) rotate(-45deg); opacity: 0.5; }
+            50% { transform: translateY(8px) rotate(-45deg); opacity: 1; }
+        }
+        
+        /* Header interactions */
+        .cd-floating-header a:hover {
+            transform: translateY(-3px) !important;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12) !important;
+        }
+        
+        /* Header hides on scroll */
+        body.cd-scrolled #cdHeader {
+            transform: translateY(-100%);
+            transition: transform 0.6s ease-out;
+        }
+    </style>
+    
+    <script>
+    (function() {
+        const header = document.getElementById('cdHeader');
+        if (!header) return;
+        
+        let lastScroll = 0;
+        
+        window.addEventListener('scroll', function() {
+            const scrollY = window.pageYOffset;
+            
+            // Hide header after scrolling down 150px
+            if (scrollY > 150 && scrollY > lastScroll) {
+                document.body.classList.add('cd-scrolled');
+                header.style.pointerEvents = 'none';
+            } else if (scrollY < 50) {
+                document.body.classList.remove('cd-scrolled');
+                header.style.pointerEvents = '';
+            }
+            
+            // Fade scroll indicator
+            const indicator = header.querySelector('.cd-scroll-indicator');
+            if (indicator && scrollY < 200) {
+                indicator.style.opacity = 1 - (scrollY / 200);
+            }
+            
+            lastScroll = scrollY;
+        });
+        
+        // Log that header was injected (for debugging)
+        console.log('✅ Cairde Designs header injected by MU plugin');
+    })();
+    </script>
+    <?php
+}, 9999); // Very late priority to ensure it renders last
+?>

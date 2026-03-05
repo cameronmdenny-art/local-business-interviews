@@ -1,0 +1,100 @@
+# MANUAL DEPLOYMENT STEPS
+
+Your updated Local Legend Stories files are ready to deploy.
+
+## Files to Upload
+
+Location: `/Users/camerondenny/Desktop/local-business-interviews/`
+
+### File 1: `mu-cairde-header-complete.php`
+**Updated with:**
+- "Local Legend Stories" branding (not Cairde Designs)
+- "Celebrating Local Business" tagline
+- Logo image: local-legend-logo.png
+
+### File 2: `mu-local-legend-footer.php`  
+**New footer with:**
+- Local Legend Stories branding
+- Navigation links
+- Gold/tan color scheme matching logo
+
+## Upload Instructions
+
+### Method 1: Direct to /public_html/ (FASTEST)
+
+1. Go to Hostinger cPanel
+2. File Manager → /public_html/
+3. Upload both files:
+   - mu-cairde-header-complete.php
+   - mu-local-legend-footer.php
+
+4. Clear LiteSpeed cache:
+   - LiteSpeed Cache Manager → Purge All
+
+5. Wait 2 minutes and refresh your site
+
+### Method 2: Via wp-content/mu-plugins (if directory doesn't exist, create it first)
+
+1. Go to Hostinger cPanel
+2. File Manager → /public_html/wp-content/
+3. Create folder "mu-plugins" if it doesn't exist
+4. Upload both files there
+5. Clear cache
+
+### Method 3: Using Existing Working Upload Access
+
+Since the site is already deployed and working, use whatever access method got the previous files there:
+- SSH if available
+- SFTP client (Cyberduck, FileZilla)
+- Hostinger's upload tool
+
+## What These Files Do
+
+**mu-cairde-header-complete.php:**
+- Hooks into wp_body_open
+- Displays professional fixed header
+- Shows Local Legend Stories logo and branding
+- Navigation: Directory | Submit Interview | Recommend
+- Responsive design (mobile, tablet, desktop)
+- Gold accents (#bfa673, #d4c197)
+
+**mu-local-legend-footer.php:**
+- Hooks into wp_footer
+- Displays professional footer
+- Local Legend Stories branding
+- Navigation columns (Explore, Community, Legal)
+- Copyright section
+- Links to all key pages
+
+## After Upload
+
+1. Clear all caches
+2. Wait 2 minutes
+3. Visit: https://ivory-lark-138468.hostingersite.com/
+4. You should see:
+   - Local Legend Stories header with logo
+   - New professional footer
+   - All in gold/tan color scheme
+   - No more "Cairde Designs" text
+
+## File Contents Quick Reference
+
+Header shows:
+```
+[LOGO] Local Legend Stories
+       Celebrating Local Business
+       
+Directory | Submit Interview | Recommend Business
+```
+
+Footer shows:
+```
+[LOGO] Local Legend Stories | Explore | Community | Legal
+Celebrating Local Business  | Links    | Links     | Links
+```
+
+---
+
+**Status:** Ready for manual deployment
+**Timestamp:** March 3, 2026
+**Two files ready** in `/Users/camerondenny/Desktop/local-business-interviews/`

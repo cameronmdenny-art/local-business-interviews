@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#111214">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <title>Login | Cairde Scraper</title>
+  <link rel="manifest" href="{{ url_for('static', filename='manifest.webmanifest') }}">
+  <link rel="apple-touch-icon" href="{{ url_for('static', filename='cairde-logo.svg') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='auth.css') }}" />
+</head>
+<body>
+  <div class="auth-shell">
+    <div class="auth-card">
+      <h1>Sign In</h1>
+      <p class="sub">Use email/password or Google to access your own lead history.</p>
+
+      {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+          {% for category, message in messages %}
+            <div class="flash {{ category }}">{{ message }}</div>
+          {% endfor %}
+        {% endif %}
+      {% endwith %}
+
+      {% if google_enabled %}
+      <a class="google-btn" href="{{ url_for('google_login') }}">Continue with Google</a>
+      <div class="divider">or</div>
+      {% endif %}
+
+      <form method="post" action="{{ url_for('login') }}">
+        <label>Email</label>
+        <input type="email" name="email" required />
+
+        <label>Password</label>
+        <input type="password" name="password" required />
+
+        <label class="remember"><input type="checkbox" name="remember" checked /> Remember me</label>
+
+        <button type="submit">Login</button>
+      </form>
+
+      <p class="alt">No account? <a href="{{ url_for('register') }}">Create one</a></p>
+    </div>
+  </div>
+  <script>
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('{{ url_for('static', filename='sw.js') }}').catch(() => {});
+    }
+  </script>
+</body>
+</html>

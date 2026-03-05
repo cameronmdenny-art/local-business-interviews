@@ -1,0 +1,246 @@
+<?php
+/**
+ * Plugin Name: Cairde Luxury Motion Layer
+ * Description: Premium floating, water-like motion and smooth luxury interactions site-wide.
+ * Version: 1.0.0
+ */
+
+if (!defined('ABSPATH')) {
+    exit;
+}
+
+add_action('wp_head', function () {
+    if (is_admin()) {
+        return;
+    }
+    ?>
+    <style id="cairde-luxury-motion">
+        :root {
+            --cd-gold: #b08a3c;
+            --cd-black: #101114;
+            --cd-white: #ffffff;
+            --cd-soft-shadow: 0 14px 34px rgba(16, 17, 20, 0.08);
+            --cd-soft-shadow-hover: 0 20px 44px rgba(16, 17, 20, 0.13);
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            background-attachment: fixed;
+        }
+
+        body::before {
+            content: "";
+            position: fixed;
+            inset: -14% -8%;
+            z-index: 0;
+            pointer-events: none;
+            background:
+                radial-gradient(40% 36% at 14% 20%, rgba(176,138,60,0.06) 0%, transparent 72%),
+                radial-gradient(36% 34% at 84% 76%, rgba(0,0,0,0.045) 0%, transparent 72%),
+                radial-gradient(30% 28% at 42% 90%, rgba(176,138,60,0.03) 0%, transparent 72%);
+            animation: cdLuxuryWaterShift 16s ease-in-out infinite;
+            will-change: transform;
+        }
+
+        .site-main,
+        .lbi-homepage,
+        .lbi-directory-app,
+        .lbi-single-directory,
+        .lbi-single-interview,
+        .lbi-archive-interviews {
+            position: relative;
+            z-index: 1;
+        }
+
+        .lbi-card,
+        .lbi-post-card,
+        .lbi-directory-card,
+        .lbi-results-list,
+        .lbi-map-panel,
+        .lbi-directory-controls,
+        .lbi-form,
+        .lbi-contact-info,
+        .lbi-contact-section,
+        .lbi-additional-section,
+        .lbi-video-container,
+        .lbi-related-posts,
+        .footer-cta {
+            transition:
+                transform .45s cubic-bezier(0.22, 1, 0.36, 1),
+                box-shadow .45s cubic-bezier(0.22, 1, 0.36, 1),
+                border-color .35s ease,
+                background-color .35s ease;
+            box-shadow: var(--cd-soft-shadow);
+        }
+
+        .lbi-card:hover,
+        .lbi-post-card:hover,
+        .lbi-directory-card:hover,
+        .lbi-results-list:hover,
+        .lbi-map-panel:hover,
+        .lbi-directory-controls:hover,
+        .lbi-form:hover,
+        .lbi-contact-info:hover,
+        .lbi-contact-section:hover,
+        .lbi-additional-section:hover,
+        .lbi-video-container:hover,
+        .lbi-related-posts:hover,
+        .footer-cta:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--cd-soft-shadow-hover);
+        }
+
+        .lbi-btn,
+        .lbi-btn-primary,
+        .lbi-btn-ghost,
+        .lbi-submit-btn,
+        .lbi-filter-btn,
+        .lbi-search-btn,
+        .lbi-share-btn,
+        .footer-cta-btn,
+        .cd-btn,
+        .cd-top-btn {
+            position: relative;
+            overflow: hidden;
+            transition:
+                transform .34s cubic-bezier(0.22, 1, 0.36, 1),
+                box-shadow .34s cubic-bezier(0.22, 1, 0.36, 1),
+                border-color .34s ease,
+                filter .34s ease;
+        }
+
+        .lbi-btn::before,
+        .lbi-btn-primary::before,
+        .lbi-btn-ghost::before,
+        .lbi-submit-btn::before,
+        .lbi-filter-btn::before,
+        .lbi-search-btn::before,
+        .lbi-share-btn::before,
+        .footer-cta-btn::before,
+        .cd-btn::before,
+        .cd-top-btn::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(120deg, rgba(255,255,255,0) 18%, rgba(255,255,255,0.52) 50%, rgba(255,255,255,0) 82%);
+            transform: translateX(-125%);
+            transition: transform .85s cubic-bezier(0.22, 1, 0.36, 1);
+            pointer-events: none;
+        }
+
+        .lbi-btn:hover,
+        .lbi-btn-primary:hover,
+        .lbi-btn-ghost:hover,
+        .lbi-submit-btn:hover,
+        .lbi-filter-btn:hover,
+        .lbi-search-btn:hover,
+        .lbi-share-btn:hover,
+        .footer-cta-btn:hover,
+        .cd-btn:hover,
+        .cd-top-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 14px 28px rgba(16, 17, 20, 0.16);
+            filter: saturate(1.03);
+        }
+
+        .lbi-btn:hover::before,
+        .lbi-btn-primary:hover::before,
+        .lbi-btn-ghost:hover::before,
+        .lbi-submit-btn:hover::before,
+        .lbi-filter-btn:hover::before,
+        .lbi-search-btn:hover::before,
+        .lbi-share-btn:hover::before,
+        .footer-cta-btn:hover::before,
+        .cd-btn:hover::before,
+        .cd-top-btn:hover::before {
+            transform: translateX(125%);
+        }
+
+        body.cd-lux-scroll .lbi-hero,
+        body.cd-lux-scroll .lbi-directory-hero,
+        body.cd-lux-scroll #cdTopNav {
+            transition: transform .7s cubic-bezier(0.22, 1, 0.36, 1), box-shadow .7s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+
+        .lbi-hero,
+        .lbi-directory-hero,
+        #cdTopNav,
+        #cairde-footer-container {
+            backdrop-filter: saturate(130%);
+            -webkit-backdrop-filter: saturate(130%);
+        }
+
+        @keyframes cdLuxuryWaterShift {
+            0%, 100% {
+                transform: translate3d(0, 0, 0) scale(1);
+            }
+            50% {
+                transform: translate3d(0, -2.2%, 0) scale(1.03);
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            html { scroll-behavior: auto; }
+            body::before,
+            .lbi-card,
+            .lbi-post-card,
+            .lbi-directory-card,
+            .lbi-results-list,
+            .lbi-map-panel,
+            .lbi-directory-controls,
+            .lbi-form,
+            .lbi-contact-info,
+            .lbi-contact-section,
+            .lbi-additional-section,
+            .lbi-video-container,
+            .lbi-related-posts,
+            .footer-cta,
+            .lbi-btn,
+            .lbi-btn-primary,
+            .lbi-btn-ghost,
+            .lbi-submit-btn,
+            .lbi-filter-btn,
+            .lbi-search-btn,
+            .lbi-share-btn,
+            .footer-cta-btn,
+            .cd-btn,
+            .cd-top-btn {
+                animation: none !important;
+                transition: none !important;
+            }
+        }
+    </style>
+    <?php
+}, 1200);
+
+add_action('wp_footer', function () {
+    if (is_admin()) {
+        return;
+    }
+    ?>
+    <script>
+        (function () {
+            var ticking = false;
+            function applyScrollState() {
+                if (window.pageYOffset > 10) {
+                    document.body.classList.add('cd-lux-scroll');
+                } else {
+                    document.body.classList.remove('cd-lux-scroll');
+                }
+                ticking = false;
+            }
+
+            window.addEventListener('scroll', function () {
+                if (!ticking) {
+                    window.requestAnimationFrame(applyScrollState);
+                    ticking = true;
+                }
+            }, { passive: true });
+            applyScrollState();
+        })();
+    </script>
+    <?php
+}, 99999);
