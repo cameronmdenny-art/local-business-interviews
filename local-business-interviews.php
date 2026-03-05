@@ -94,6 +94,7 @@ if ( is_admin() ) {
     require_once LBI_PLUGIN_DIR . 'includes/admin-dashboard.php';
     require_once LBI_PLUGIN_DIR . 'includes/demo-admin.php';
     require_once LBI_PLUGIN_DIR . 'includes/category-setup.php';
+    require_once LBI_PLUGIN_DIR . 'includes/directory-cleanup.php';
 }
 
 // Enqueue styles and scripts
