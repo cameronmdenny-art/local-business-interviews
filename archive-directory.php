@@ -365,7 +365,7 @@ main.lbi-directory-app .lbi-pagination a:hover {
 
                 <div class="lbi-filter-field" style="display:grid;gap:6px;">
                     <label for="lbi-location"><?php esc_html_e( 'Location', 'local-business-interviews' ); ?></label>
-                    <select id="lbi-location" name="location" style="height:48px;border:1px solid #cbd5e1;border-radius:12px;padding:0 12px;font-size:15px;">
+                    <select id="lbi-location" name="location" class="lbi-searchable-select" style="height:48px;border:1px solid #cbd5e1;border-radius:12px;padding:0 12px;font-size:15px;">
                         <option value=""><?php esc_html_e( 'All service cities', 'local-business-interviews' ); ?></option>
                         <?php if ( ! empty( $cities ) && ! is_wp_error( $cities ) ) : ?>
                             <?php foreach ( $cities as $city ) : ?>
@@ -379,7 +379,7 @@ main.lbi-directory-app .lbi-pagination a:hover {
 
                 <div class="lbi-filter-field" style="display:grid;gap:6px;">
                     <label for="lbi-business-category"><?php esc_html_e( 'Category', 'local-business-interviews' ); ?></label>
-                    <select id="lbi-business-category" name="business_category" style="height:48px;border:1px solid #cbd5e1;border-radius:12px;padding:0 12px;font-size:15px;">
+                    <select id="lbi-business-category" name="business_category" class="lbi-searchable-select" style="height:48px;border:1px solid #cbd5e1;border-radius:12px;padding:0 12px;font-size:15px;">
                         <option value=""><?php esc_html_e( 'All categories', 'local-business-interviews' ); ?></option>
                         <?php if ( ! empty( $categories ) && ! is_wp_error( $categories ) ) : ?>
                             <?php foreach ( $categories as $category ) : ?>
