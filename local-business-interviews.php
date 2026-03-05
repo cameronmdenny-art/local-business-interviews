@@ -70,6 +70,9 @@ LBI_Assets::init(); // Load CSS and JS assets
 
 // Load custom header injector (injects header into any theme via WordPress hooks)
 require_once LBI_PLUGIN_DIR . 'includes/header-injector.php';
+if ( class_exists( 'LBI_Header_Injector' ) ) {
+    LBI_Header_Injector::init();
+}
 
 // Safe runtime fallback: render LBI shortcodes in page content without mutating DB content.
 add_filter( 'the_content', function( $content ) {
