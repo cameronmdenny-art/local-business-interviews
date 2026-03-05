@@ -44,23 +44,35 @@ class LBI_Shortcodes {
         ob_start();
         ?>
         <form class="lbi-directory-filters" method="get">
-            <select name="lbi_cat">
-                <option value=""><?php esc_html_e( 'All Categories', 'local-business-interviews' ); ?></option>
-                <?php
-                $terms = get_terms( array( 'taxonomy' => 'business_category', 'hide_empty' => false ) );
-                foreach ( $terms as $t ) : ?>
-                    <option value="<?php echo esc_attr( $t->slug ); ?>" <?php selected( $cat, $t->slug ); ?>><?php echo esc_html( $t->name ); ?></option>
-                <?php endforeach; ?>
-            </select>
-            <select name="lbi_city">
-                <option value=""><?php esc_html_e( 'All Cities', 'local-business-interviews' ); ?></option>
-                <?php
-                $terms = get_terms( array( 'taxonomy' => 'service_city', 'hide_empty' => false ) );
-                foreach ( $terms as $t ) : ?>
-                    <option value="<?php echo esc_attr( $t->slug ); ?>" <?php selected( $city, $t->slug ); ?>><?php echo esc_html( $t->name ); ?></option>
-                <?php endforeach; ?>
-            </select>
-            <button type="submit"><?php esc_html_e( 'Filter', 'local-business-interviews' ); ?></button>
+            <div class="lbi-filter-group">
+                <div class="lbi-filter-field">
+                    <label for="lbi_cat" class="lbi-filter-label"><?php esc_html_e( 'Business Category', 'local-business-interviews' ); ?></label>
+                    <select name="lbi_cat" id="lbi_cat" class="lbi-searchable-select">
+                        <option value=""><?php esc_html_e( 'All Categories', 'local-business-interviews' ); ?></option>
+                        <?php
+                        $terms = get_terms( array( 'taxonomy' => 'business_category', 'hide_empty' => false, 'orderby' => 'name' ) );
+                        foreach ( $terms as $t ) : ?>
+                            <option value="<?php echo esc_attr( $t->slug ); ?>" <?php selected( $cat, $t->slug ); ?>><?php echo esc_html( $t->name ); ?></option>
+                        <?php endforeach; ?>
+                    </select>
+                </div>
+                
+                <div class="lbi-filter-field">
+                    <label for="lbi_city" class="lbi-filter-label"><?php esc_html_e( 'Location / City', 'local-business-interviews' ); ?></label>
+                    <select name="lbi_city" id="lbi_city" class="lbi-searchable-select">
+                        <option value=""><?php esc_html_e( 'All Cities', 'local-business-interviews' ); ?></option>
+                        <?php
+                        $terms = get_terms( array( 'taxonomy' => 'service_city', 'hide_empty' => false, 'orderby' => 'name' ) );
+                        foreach ( $terms as $t ) : ?>
+                            <option value="<?php echo esc_attr( $t->slug ); ?>" <?php selected( $city, $t->slug ); ?>><?php echo esc_html( $t->name ); ?></option>
+                        <?php endforeach; ?>
+                    </select>
+                </div>
+                
+                <div class="lbi-filter-field lbi-filter-button">
+                    <button type="submit" class="lbi-btn lbi-btn-primary"><?php esc_html_e( 'Search Directory', 'local-business-interviews' ); ?></button>
+                </div>
+            </div>
         </form>
         <div class="lbi-directory-list">
             <?php if ( $query->have_posts() ) :

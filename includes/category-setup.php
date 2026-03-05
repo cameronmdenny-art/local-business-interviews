@@ -12,28 +12,151 @@ class LBI_Category_Setup {
     
     public static function create_default_categories() {
         $categories = array(
-            'Air Conditioning and Heating',
-            'Cleaning Service',
-            'Fencing',
-            'Garage Door Maintenance',
-            'Gutters',
-            'Home Watch',
-            'Movers',
-            'Pool Services',
-            'Real Estate Services',
-            'Roofing',
-            'Tree Services',
-            'Cages and Lanai',
-            'Electric',
-            'Flooring',
-            'General',
-            'Home Inspections',
-            'Mortgage',
+            // HVAC & Temperature Control
+            'Air Conditioning & Heating',
+            'Furnace Repair',
+            'Air Conditioning Repair',
+            'Heat Pump Installation',
+            'Ductless HVAC',
+            
+            // Plumbing & Water
             'Plumbing',
+            'Water Heater Repair',
+            'Pipe Repair',
+            'Water Softener',
+            'Sewer & Drain Cleaning',
+            'Well Service',
+            
+            // Electrical
+            'Electrical Repair',
+            'Electrician',
+            'Generator Installation',
+            'Home Wiring',
+            'Panel Upgrade',
+            
+            // Roofing & Gutters
+            'Roofing',
+            'Gutter Installation',
+            'Gutter Repair',
+            'Roof Repair',
+            'Roof Replacement',
+            'Skylight Installation',
+            
+            // Cleaning Services
+            'House Cleaning',
+            'Carpet Cleaning',
+            'Power Washing',
             'Pressure Washing',
+            'Window Cleaning',
+            'Chimney Cleaning',
+            'Air Duct Cleaning',
+            'Mold Removal',
+            'Post-Construction Cleaning',
+            
+            // Pest Control
+            'Pest Control',
+            'Termite Treatment',
+            'Bed Bug Treatment',
+            'Wildlife Removal',
+            'Mosquito Control',
+            
+            // Landscaping & Outdoor
+            'Landscaping',
+            'Tree Services',
+            'Tree Trimming',
+            'Tree Removal',
+            'Lawn Care',
+            'Lawn Maintenance',
+            'Garden Design',
+            'Sprinkler System',
+            'Hardscape Installation',
+            
+            // Exterior & Siding
+            'Siding Installation',
+            'Siding Repair',
+            'Door Installation',
+            'Window Installation',
+            'Deck Building',
+            'Patio Installation',
+            'Fencing',
+            'Fence Repair',
+            'Driveway Repair',
+            'Asphalt Paving',
+            'Concrete Services',
+            
+            // Flooring
+            'Flooring Installation',
+            'Hardwood Floor Refinishing',
+            'Laminate Installation',
+            'Tile Installation',
+            'Vinyl Flooring',
+            
+            // Kitchen & Bath
+            'Kitchen Remodel',
+            'Bathroom Remodel',
+            'Cabinet Installation',
+            'Countertop Installation',
+            'Backsplash Installation',
+            
+            // General Contracting & Remodeling
+            'General Contractor',
+            'Home Remodeling',
             'Remodel & Construction',
-            'Solar',
-            'Water Services'
+            'Home Addition',
+            'Room Renovation',
+            'Basement Finishing',
+            'Attic Insulation',
+            
+            // Doors & Windows
+            'Garage Door Installation',
+            'Garage Door Repair',
+            'Garage Door Maintenance',
+            
+            // Paint & Drywall
+            'Painter',
+            'Interior Painting',
+            'Exterior Painting',
+            'Drywall Installation',
+            'Drywall Repair',
+            'Texture Removal',
+            
+            // Insulation & Weather
+            'Insulation Installation',
+            'Weatherization',
+            'Caulking Service',
+            'Door Sealing',
+            
+            // Special Services
+            'Home Inspection',
+            'Home Inspections',
+            'Solar Installation',
+            'Solar Panel Installation',
+            'Solar Energy',
+            'Home Theater Installation',
+            'Smart Home Installation',
+            'Security System Installation',
+            
+            // Moving & Storage
+            'Movers',
+            'Moving Company',
+            'Local Moving',
+            
+            // Real Estate & Finance
+            'Real Estate Services',
+            'Real Estate Agent',
+            'Property Management',
+            'Mortgage',
+            'Home Appraisal',
+            
+            // Miscellaneous
+            'Home Watch',
+            'Pool Services',
+            'Pool Maintenance',
+            'Pool Repair',
+            'Hot Tub Installation',
+            'Cages and Lanai',
+            'Sauna Installation',
+            'General'
         );
         
         $created = 0;
