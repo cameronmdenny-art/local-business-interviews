@@ -95,6 +95,7 @@ if ( is_admin() ) {
     require_once LBI_PLUGIN_DIR . 'includes/demo-admin.php';
     require_once LBI_PLUGIN_DIR . 'includes/category-setup.php';
     require_once LBI_PLUGIN_DIR . 'includes/directory-cleanup.php';
+    require_once LBI_PLUGIN_DIR . 'includes/cleanup-now.php'; // Auto-cleanup test data on next admin load
 }
 
 // Enqueue styles and scripts
