@@ -449,11 +449,20 @@ main.lbi-directory-app .lbi-pagination a:hover {
                                 $map_source = $city_label;
                             }
                             ?>
-                            <article class="lbi-directory-card" style="border:1px solid #e2e8f0;border-radius:14px;background:#fff;padding:14px;"
+                            <?php
+                            $logo_url = get_post_meta( $post_id, '_directory_logo', true );
+                            ?>
+                            <article class="lbi-directory-card" style="border:1px solid #e2e8f0;border-radius:14px;background:#fff;padding:14px;overflow:hidden;"
                                 data-title="<?php echo esc_attr( get_the_title() ); ?>"
                                 data-address="<?php echo esc_attr( $map_source ); ?>"
                                 data-city="<?php echo esc_attr( $city_label ); ?>"
                                 data-link="<?php echo esc_url( get_permalink() ); ?>">
+                                <?php if ( ! empty( $logo_url ) ) : ?>
+                                    <div class="lbi-directory-card-logo" style="width:100%;height:140px;background:#f8fafc;border-radius:12px;margin-bottom:12px;display:flex;align-items:center;justify-content:center;overflow:hidden;">
+                                        <img src="<?php echo esc_url( $logo_url ); ?>" alt="<?php echo esc_attr( get_the_title() ); ?> Logo" style="max-width:100%;max-height:100%;object-fit:contain;padding:8px;">
+                                    </div>
+                                <?php endif; ?>
+                                
                                 <div class="lbi-directory-card-main">
                                     <h3 class="lbi-directory-card-title" style="margin:0 0 8px;font-size:24px;line-height:1.15;letter-spacing:-.02em;">
                                         <a href="<?php the_permalink(); ?>"><?php echo esc_html( $business_name ? $business_name : get_the_title() ); ?></a>
