@@ -48,7 +48,6 @@ jobs:
           cp mu-cairde-header-complete.php mu-plugins-deploy/
           cp mu-local-legend-footer.php mu-plugins-deploy/
           cp mu-master-cleanup.php mu-plugins-deploy/
-          cp INSTALL_LOCAL_LEGEND.php ./
           echo "MU-Plugins prepared for deployment"
           ls -la mu-plugins-deploy/
         
